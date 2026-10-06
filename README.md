@@ -63,10 +63,11 @@ Content. Nothing to configure.
 - **Settings saved from now on stay.** Settings lost before the keeper was installed are gone unless they are
   still on disk in an entry the keeper can name; see the next point.
 - **A store that was already broken.** If some mod's entry sorts ahead of `modSettings` and the keeper cannot
-  tell which mod wrote it, the keeper does not guess. It starts a fresh root ahead of everything, copies what it can
-  see, keeps the rest untouched on disk, and tries again on every launch. In that state the settings you had before
-  installing are not visible until the entry in the way is recognised (a later version may learn it). Existing
-  mod data is never overwritten.
+  tell which mod wrote it, the keeper does not guess. When that entry is the only one left it rebuilds the store
+  around it, keeping its text and any mod slices it holds; the entry's own name is the one thing lost, and a later
+  version that recognises the text puts it back under its name. Only when two or more such entries are in the way
+  does the keeper start a fresh root ahead of them, leave them untouched on disk, and try again on every launch.
+  Existing mod data is never overwritten.
 - **One launch may miss.** The game does not promise the order mod scripts run in. A mod that reads its settings
   at the very moment it loads, before the keeper has run, sees the old behaviour for that launch; it reads normally
   as soon as it next looks. Watched on three launches the keeper ran first every time.
@@ -75,11 +76,11 @@ Content. Nothing to configure.
 
 ## Removing it
 
-With the keeper gone the game is back to reading the first entry. In the normal case that entry is `modSettings`
-and the other mods find their slices as before, with a few extra fields they ignore. If the keeper is in its
-fallback layout (the log line says `BLOCKED`), run Demographics' Storage options, Repair storage, or any mod's
-options save, before disabling it; otherwise the erase-on-second-entry helpers would clear the store on their next
-save.
+Normally nothing to do: the keeper keeps the real store at one row, so with it gone the game reads `modSettings`
+first as before, and the other mods find their slices (with a few extra fields they ignore). The one exception is a
+store with two or more entries the keeper could not name; the log line then says `BLOCKED` and the keeper cannot
+make it one row. Save any mod's options once, or run Demographics' Storage options, Repair storage, before disabling
+it in that case; otherwise the erase-on-second-entry helper in other mods would clear the store on its next save.
 
 ## For modders
 

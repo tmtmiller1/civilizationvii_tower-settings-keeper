@@ -57,10 +57,17 @@ Reads only work when the root IS row 1. On install the keeper looks at row 1 and
    History & Rankings, AutoMissionary's settings, Compact Policy Cards' store): confirm the key with the probe, remove
    the row, keep its text, continue with the next row 1.
 3. Row 1 is an unmarked settings root and it is the ONLY row: adopt it as `modSettings`. Done.
-4. Otherwise fallback mode: write the root under `"\u0001"`, which sorts before everything the engine stores. The row
-   that could not be named is not touched; its object-valued entries are copied into the root as slices and its full
-   text kept under `__blocked`. Reads work from now on; the unnamed row and anything behind it stay on disk for an
-   external tool.
+4. Row 1 cannot be named but is the ONLY row: nothing can hide behind it, so the keeper takes its text, clears the
+   store and writes a normal `modSettings` root with the row's object-valued entries as slices and its full text
+   under `__blocked`. The row's key name is the one thing lost (no mod could read it anyway); a later key list that
+   recognises the text moves it under its key (`reclaimBlocked`).
+5. Otherwise (two or more rows that cannot be named) fallback mode: write the root under `"\u0001"`, which sorts
+   before everything the engine stores, with the same salvage; the unnamed rows stay on disk untouched.
+
+Once the root is row 1, `tidy()` removes raw rows hiding behind it for keys the root already holds (older copies
+nobody can read), so the real store is one row and the erase-on-second-entry helpers stay quiet even after the keeper
+is removed. Only unknown keys hiding behind the root, or a fallback store, keep the row count above one; the log says
+so.
 
 Rows removed in step 2 are written into `__ls` at the end, so their mods read them back through the keeper.
 
@@ -101,7 +108,8 @@ Reviewed before the first release. Found and fixed:
 - `readRoot()` accepted any plain-object row 1 as the root. A lower-sorting key written raw after start-up by a mod
   that ran before the keeper would have been read as the root and written back under `modSettings`: the very
   contamination the mod exists to stop. The root is now always marked and an unmarked row 1 is refused.
-- Fallback mode was permanent. It is now re-examined on every launch (above).
+- Fallback mode was permanent. It is now re-examined on every launch (above), a lone unnamed row collapses into a
+  normal root (1.0.1), and stale hidden copies are removed so the store is one row.
 - `getItem("modSettings")` re-serialised the public part on every call; now cached until the row changes.
 
 Known limits, by design:
@@ -177,3 +185,7 @@ run left, each a fresh process. Watched:
 | Cultural Diffusion live `CONFIG` after its `applyTunableOverrides()` | `claimOnlyUnowned false, recedeBorders false` | `true, true` |
 | Canals start line and GameConfiguration pin | `rules: by age`, `{"mode":"ages"}` | `rules: one-tile canals`, `{"mode":"one-tile"}` |
 | sib Celebratory Celebrations | `masterEnable=undefined`, `showFireworks=undefined` read into its CONFIG | `0`, `0` read into its CONFIG; the effect needs a celebration and was not triggered |
+
+1.0.1 (runs `V2-poison`, `V2-clean`, `O-regress`): the 2026-10-06 store ends in the normal layout, one real row, with
+AutoMissionary's values read through the keeper and the clobbered row's slice salvaged; the clean store is unchanged;
+the Options screen in the menu and in a game reads back all seven values set in the 1.0.0 run.

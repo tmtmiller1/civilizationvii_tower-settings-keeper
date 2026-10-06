@@ -137,17 +137,44 @@ test("empty store: nothing written until the first write, then one marked row", 
   assert.ok(JSON.parse(ls.rows().modSettings)[MARK_KEY]);
 });
 
-test("the 2026-10-06 store: AutoMissionary row folded; the clobbered modSettings is left, its slice copied", () => {
+test("the 2026-10-06 store: AutoMissionary row folded, the lone clobbered modSettings collapsed into a normal root", () => {
   const clobbered = JSON.stringify({ ...JSON.parse(AM), "sib-celebratory-celebrations": { _savedSfxVolume: 0.4 } });
   const ls = fakeStore({ "AutoMissionary.settings.v2": AM, modSettings: clobbered });
   const api = install(ls, opts());
   assert.deepEqual(api.status().folded, ["AutoMissionary.settings.v2"]);
-  assert.equal(api.status().rootKey, FALLBACK_ROOT_KEY, "a clobbered root is not root-shaped and is never probed");
+  assert.equal(api.status().rootKey, ROOT_KEY, "nothing hid behind the lone row, so the store was rebuilt");
+  assert.equal(api.status().blocked, false);
+  assert.deepEqual(Object.keys(ls.rows()), ["modSettings"], "one real row: safe to remove the keeper later");
   assert.equal(ls.getItem("AutoMissionary.settings.v2"), AM);
   assert.equal(JSON.parse(ls.getItem("modSettings"))["sib-celebratory-celebrations"]._savedSfxVolume, 0.4);
-  assert.deepEqual(Object.keys(ls.rows()), [FALLBACK_ROOT_KEY, "modSettings"]);
-  assert.equal(ls.rows().modSettings, clobbered, "the unnamed row is untouched");
+  assert.equal(JSON.parse(ls.rows().modSettings)[BLOCKED_KEY].value, clobbered, "the row's text is kept");
   assert.equal(ls.length, 1);
+});
+
+test("a lone row of an unknown key is collapsed, and reclaimed under its key once the key is known", () => {
+  const ls = fakeStore({ "ba_activations_data_backup": '{"runs":[1,2]}' });
+  const api = install(ls, opts());
+  assert.equal(api.status().rootKey, ROOT_KEY);
+  assert.deepEqual(Object.keys(ls.rows()), ["modSettings"]);
+  assert.equal(ls.getItem("ba_activations_data_backup"), null, "not readable under its key yet");
+  const known = KNOWN_KEYS.concat([{ key: "ba_activations_data_backup", match: (o) => !!o && Array.isArray(o.runs) }]);
+  const ls2 = fakeStore(ls.rows());
+  install(ls2, { ...opts(), knownKeys: known });
+  assert.equal(ls2.getItem("ba_activations_data_backup"), '{"runs":[1,2]}', "moved under its key");
+  assert.equal(JSON.parse(ls2.rows().modSettings)[BLOCKED_KEY], undefined);
+});
+
+test("stale raw copies hiding behind the root are removed so the store is one row", () => {
+  const ls = fakeStore({ modSettings: HOF });
+  install(ls, opts());
+  ls.setItem("tmt-compact-policy-cards", '{"_settings":{"a":1}}');
+  // an older raw row of the same key, written when the keeper was not installed, sorts after modSettings
+  Object.getPrototypeOf(ls).setItem.call(ls, "tmt-compact-policy-cards", '{"_settings":{"old":true}}');
+  assert.equal(Object.keys(ls.rows()).length, 2);
+  const ls2 = fakeStore(ls.rows());
+  const api2 = install(ls2, opts());
+  assert.equal(api2.status().rows, 1, "stale copy removed");
+  assert.equal(ls2.getItem("tmt-compact-policy-cards"), '{"_settings":{"a":1}}', "the keeper's copy is the one kept");
 });
 
 test("an empty-object row before the root is never probed over the hidden modSettings", () => {
@@ -286,6 +313,23 @@ test("fallback mode ends on a later launch once the blocking row's key is known;
   assert.equal(helperLoad(ls2, "emigration", "y"), 2, "a slice only the hidden row had is back");
   assert.equal(ls2.getItem("own"), "v");
   assert.equal(ls2.getItem("CM_S1_P0_BACKUP_META"), CM, "the former blocker is a virtual key now");
+});
+
+test("fallback mode ends when the lone row behind the lifted root can be collapsed", () => {
+  const CM = '{"chunks":3,"checksum":"x"}';
+  const clobbered = JSON.stringify({ ...JSON.parse(AM), demographics: { x: 1 } }); // not root-shaped, nameless
+  const ls = fakeStore({ "CM_S1_P0_BACKUP_META": CM, modSettings: clobbered });
+  const api = install(ls, opts());
+  assert.equal(api.status().rootKey, FALLBACK_ROOT_KEY, "two unnamed rows: fallback");
+  ls.setItem("own", "v");
+  const known = KNOWN_KEYS.concat([{ key: "CM_S1_P0_BACKUP_META", match: (o) => !!o && "chunks" in o }]);
+  const ls2 = fakeStore(ls.rows());
+  const api2 = install(ls2, { ...opts(), knownKeys: known });
+  assert.equal(api2.status().rootKey, ROOT_KEY);
+  assert.deepEqual(Object.keys(ls2.rows()), ["modSettings"]);
+  assert.equal(ls2.getItem("own"), "v");
+  assert.equal(ls2.getItem("CM_S1_P0_BACKUP_META"), CM);
+  assert.equal(JSON.parse(ls2.getItem("modSettings")).demographics.x, 1, "slice salvaged from the collapsed row");
 });
 
 test("fallback mode stays, store unchanged, while the blocking row is still unknown", () => {

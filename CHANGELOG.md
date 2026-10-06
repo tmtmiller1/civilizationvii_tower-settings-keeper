@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1 (2026-10-06)
+
+- A store whose only remaining entry cannot be named is rebuilt around that entry (its text and slices kept) instead
+  of being left in the fallback layout, so the store is one row and removing the keeper later is safe.
+- A kept copy of an unnamed entry moves under its name once a later key list recognises it.
+- Stale raw copies hiding behind the root for keys the keeper already holds are removed.
+
 ## 1.0.0 (2026-10-06)
 
 - First release. Every `localStorage` key kept inside the one row the game reads correctly; `modSettings` passed

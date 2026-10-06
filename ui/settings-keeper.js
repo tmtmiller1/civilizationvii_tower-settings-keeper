@@ -52,6 +52,14 @@ function parse(text) {
   }
 }
 
+function safeMatch(entry, obj, text) {
+  try {
+    return typeof entry.match === "function" && entry.match(obj, text) === true;
+  } catch (_) {
+    return false;
+  }
+}
+
 function withoutInternals(o) {
   const out = {};
   for (const k of Object.keys(o)) if (!INTERNAL.includes(k)) out[k] = o[k];
@@ -158,15 +166,7 @@ class Keeper {
   // ---- start-up: make the root row 1 --------------------------------------------------------------------------
 
   identify(obj, text) {
-    for (const k of this.known) {
-      let hit = false;
-      try {
-        hit = typeof k.match === "function" && k.match(obj, text) === true;
-      } catch (_) {
-        hit = false;
-      }
-      if (hit && this.probeIs(k.key, text)) return k.key;
-    }
+    for (const k of this.known) if (safeMatch(k, obj, text) && this.probeIs(k.key, text)) return k.key;
     return null;
   }
 
@@ -184,17 +184,11 @@ class Keeper {
   blockedMode(text) {
     this.blocked = true;
     this.rootKey = FALLBACK_ROOT_KEY;
-    const obj = parse(text);
-    const root = isPlainObject(obj) ? withoutInternals(obj) : {};
-    for (const k of Object.keys(root)) if (!isPlainObject(root[k])) delete root[k];
-    const virt = isPlainObject(obj) && isPlainObject(obj[VIRTUAL_KEY]) ? Object.assign({}, obj[VIRTUAL_KEY]) : {};
-    for (const [k, v] of this.folded) virt[k] = v;
-    root[VIRTUAL_KEY] = virt;
-    root[BLOCKED_KEY] = { at: this.now(), bytes: text.length, value: text.slice(0, BLOCKED_COPY_LIMIT) };
+    const root = this.rootFromUnnamed(text);
     this.writeRoot(root);
-    const copied = Object.keys(root).length - 3;
-    this.log("error", "row 1 (" + text.length + " bytes) could not be named; root written under the lowest key, " +
-      copied + " slices copied, the row kept as a copy");
+    const copied = Object.keys(root).length - 2;
+    this.log("error", "row 1 (" + text.length + " bytes) could not be named and " + (this.engine.length() - 1) +
+      " more rows hide behind it; root written under the lowest key, " + copied + " slices copied, the row kept as a copy");
   }
 
   /** One fold step: true when the root is row 1, false when stopped in blocked mode, null to go on. */
@@ -202,11 +196,7 @@ class Keeper {
     const text = this.engine.get(ROOT_KEY);
     if (text == null) return true;
     const obj = parse(text);
-    const mark = isPlainObject(obj) ? obj[MARK_KEY] : null;
-    if (isPlainObject(mark)) {
-      const rk = mark.root === FALLBACK_ROOT_KEY ? FALLBACK_ROOT_KEY : ROOT_KEY;
-      if (this.probeIs(rk, text)) return this.adopt(rk);
-    }
+    if (this.adoptMarked(obj, text)) return true;
     const k = this.identify(obj, text);
     if (k) {
       this.folded.push([k, text]);
@@ -216,8 +206,43 @@ class Keeper {
     }
     // an unmarked settings root is only probed when nothing can be hidden behind it
     if (looksLikeRoot(obj) && this.engine.length() === 1 && this.probeIs(ROOT_KEY, text)) return this.adopt(ROOT_KEY);
+    // a lone row that cannot be named has nothing behind it: its text is in hand, so the store can be rebuilt
+    if (this.engine.length() === 1) {
+      this.collapseLoneRow(text);
+      return true;
+    }
     this.blockedMode(text);
     return false;
+  }
+
+  /** The only row left cannot be named: keep its slices and its text in a normal root, drop the nameless row. */
+  collapseLoneRow(text) {
+    this.engine.clear();
+    this.rootKey = ROOT_KEY;
+    this.blocked = false;
+    this.writeRoot(this.rootFromUnnamed(text));
+    this.log("warn", "the one row left (" + text.length + " bytes) could not be named; its slices and text were kept " +
+      "and the store rebuilt as modSettings");
+  }
+
+  /** A root built from an unnamed row: its object-valued entries as slices, its text under __blocked. */
+  rootFromUnnamed(text) {
+    const obj = parse(text);
+    const root = isPlainObject(obj) ? withoutInternals(obj) : {};
+    for (const k of Object.keys(root)) if (!isPlainObject(root[k])) delete root[k];
+    const virt = isPlainObject(obj) && isPlainObject(obj[VIRTUAL_KEY]) ? Object.assign({}, obj[VIRTUAL_KEY]) : {};
+    for (const [k, v] of this.folded) virt[k] = v;
+    root[VIRTUAL_KEY] = virt;
+    root[BLOCKED_KEY] = { at: this.now(), bytes: text.length, value: text.slice(0, BLOCKED_COPY_LIMIT) };
+    return root;
+  }
+
+  /** Row 1 carries the keeper's mark: confirm its key and adopt it. */
+  adoptMarked(obj, text) {
+    const mark = isPlainObject(obj) ? obj[MARK_KEY] : null;
+    if (!isPlainObject(mark)) return false;
+    const rk = mark.root === FALLBACK_ROOT_KEY ? FALLBACK_ROOT_KEY : ROOT_KEY;
+    return this.probeIs(rk, text) ? this.adopt(rk) : false;
   }
 
   adopt(rootKey) {
@@ -241,6 +266,7 @@ class Keeper {
       if (r === true) {
         this.finishFold();
         if (this.blocked) this.tryToLeaveBlockedMode();
+        this.tidy();
         return;
       }
       if (r === false) return;
@@ -280,8 +306,10 @@ class Keeper {
         this.engine.remove(k);
         continue;
       }
-      const adoptable = looksLikeRoot(obj) && this.engine.length() === 1 && this.probeIs(ROOT_KEY, text);
-      return { clear: adoptable, pulled, behind: adoptable ? obj : null };
+      if (this.engine.length() !== 1) return { clear: false, pulled, behind: null };
+      if (looksLikeRoot(obj) && this.probeIs(ROOT_KEY, text)) return { clear: true, pulled, behind: obj };
+      this.engine.clear();
+      return { clear: true, pulled, behind: this.rootFromUnnamed(text) };
     }
     return { clear: false, pulled, behind: null };
   }
@@ -300,6 +328,45 @@ class Keeper {
     this.writeRoot(merged);
     const moved = way.pulled.length ? ", moved " + way.pulled.map(([k]) => k).join(", ") : "";
     this.log("warn", "left fallback mode: root is modSettings again" + moved);
+  }
+
+  /**
+   * Housekeeping once the root is row 1: a kept copy of an unnamed row whose key is known by now moves under
+   * that key; raw rows hiding behind the root for keys the root already holds (older, unreadable by anyone) are
+   * removed, so the real store is one row and the "clear() when length > 1" helpers stay quiet even if the keeper
+   * is removed later. removeItem is keyed, so this reads nothing.
+   */
+  tidy() {
+    const root = this.readRootAny();
+    if (!root) return;
+    if (this.reclaimBlocked(root)) this.writeRoot(root);
+    if (this.engine.length() > 1 && !this.blocked) this.dropStaleRows(root);
+  }
+
+  /** @returns {boolean} Whether the kept copy of an unnamed row was moved under a key known by now. */
+  reclaimBlocked(root) {
+    const blocked = root[BLOCKED_KEY];
+    if (!isPlainObject(blocked) || typeof blocked.value !== "string") return false;
+    const obj = parse(blocked.value);
+    const hits = this.known.filter((e) => safeMatch(e, obj, blocked.value));
+    const virt = isPlainObject(root[VIRTUAL_KEY]) ? root[VIRTUAL_KEY] : (root[VIRTUAL_KEY] = {});
+    // a mod whose data is already held is not missing anything: the copy is a stray duplicate, not its lost row
+    if (!hits.length || hits.some((e) => virt[e.key] !== undefined)) return false;
+    const hit = hits[0];
+    virt[hit.key] = blocked.value;
+    delete root[BLOCKED_KEY];
+    this.log("warn", "the kept copy of an unnamed row is " + JSON.stringify(hit.key) + " now; moved under that key");
+    return true;
+  }
+
+  dropStaleRows(root) {
+    const held = isPlainObject(root[VIRTUAL_KEY]) ? Object.keys(root[VIRTUAL_KEY]) : [];
+    const before = this.engine.length();
+    for (const k of held) if (!this.isRootName(k)) this.engine.remove(k);
+    const gone = before - this.engine.length();
+    if (gone) this.log("warn", "removed " + gone + " stale row(s) hiding behind the root");
+    const left = this.engine.length() - 1;
+    if (left > 0) this.log("warn", left + " unreadable row(s) of unknown keys remain behind the root");
   }
 
   /** Write one virtual key through the normal path (start-up helper). */
