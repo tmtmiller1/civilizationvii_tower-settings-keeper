@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Every tag unique: one duplicate LOC tag rolls back the whole file. -->
+<Database>
+    <EnglishText>
+        <Row Tag="LOC_SETTINGS_KEEPER_MOD_NAME">
+            <Text>Tower Settings Keeper</Text>
+        </Row>
+        <Row Tag="LOC_SETTINGS_KEEPER_MOD_DESCRIPTION">
+            <Text>Makes mod settings survive a restart. The game answers every saved-settings read with the first entry it stored, whichever mod asked, so options panels lose what they saved and can overwrite each other. Tower Settings Keeper keeps every mod's entry inside the one row the game reads correctly and answers every read and write from it, in the main menu and in the game. Works with mods that have not been updated for it. No settings of its own.</Text>
+        </Row>
+    </EnglishText>
+</Database>

@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.DS_Store
+*.bak
+# local run output: logs and store copies from this machine
+devtools/compat/runs/
+devtools/compat/winid-bin
+devtools/compat/_built-*
+devtools/compat/runs-*.out
