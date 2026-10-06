@@ -9,7 +9,8 @@
 //   - getItem/setItem/removeItem on any other key read and write root.__ls[key] inside that row;
 //   - "modSettings" itself is passed through minus the keeper's own fields, so mods that keep a slice per mod id in
 //     it work unchanged, and their write-back keeps every other key intact;
-//   - length reports 1 and key(0) "modSettings", so the "clear() when length > 1" guard many mods carry never fires;
+//   - length reports 1, so the "clear() when length > 1" guard many mods carry never fires; key(i) stays null as the
+//     engine has it, so a loop that lists keys to remove them stays the no-op it has always been;
 //   - clear() empties the store and rewrites the root with the other mods' keys kept.
 // At start it makes sure its root IS row 1. Rows that sort before it and can be named (by content, see
 // KNOWN_KEYS below) are removed and folded into the root: their bytes move, nothing is lost. A row it cannot name is
@@ -442,8 +443,9 @@ class Keeper {
     this.log("warn", "store cleared; root rewritten with " + Object.keys(virt).length + " kept keys");
   }
 
-  key(i) {
-    return Number(i) === 0 && this.engine.length() > 0 ? ROOT_KEY : null;
+  /** Always null, exactly as the engine answers: a "list every key and remove it" loop stays the no-op it has been. */
+  key(_i) {
+    return null;
   }
 
   length() {

@@ -40,8 +40,8 @@ Every method on the engine's `localStorage` object is replaced in place (own pro
 - `setItem(k, v)`: `modSettings` replaces the public part (the value must parse to an object; the internal fields are
   carried over); any other key sets `__ls[k]`.
 - `removeItem(k)`: likewise.
-- `length` reports 1 while the store holds anything, `key(0)` is `modSettings`. The helper that ~50 Workshop mods ship
-  calls `clear()` when `length > 1`; it never fires.
+- `length` reports 1 while the store holds anything; `key(i)` is null as the engine has it (1.0.2). The helper that
+  ~50 Workshop mods ship calls `clear()` when `length > 1`; it never fires.
 - `clear()` empties the real store and rewrites the root with `__ls` kept. Demographics' "Repair storage" (clear, then
   write `modSettings` back) therefore keeps the other mods' keys and returns a fallback-mode store to the normal
   layout.
@@ -119,8 +119,6 @@ Known limits, by design:
   anyway, since the same row was first). Demographics' Repair storage (`clear()`) deletes those hidden rows, as it did
   before the keeper; `__ls` survives it.
 - Script order is not promised by the loader; see Script order. Watched first in every launch as one file.
-- `key(i)` reports only `modSettings`; a mod that enumerates the store to delete every key would remove the public
-  slices. No mod in the corpus does that (Demographics' purge matches its own key names only).
 - The probe can overwrite a hidden row that happens to carry a guessed key; the key list is content-gated and the
   single-row rule applies to unmarked roots, so no probe has hit a hidden row in any run or test.
 - Every write rewrites the whole row (the shared root can be several hundred KB with Demographics' history in it);

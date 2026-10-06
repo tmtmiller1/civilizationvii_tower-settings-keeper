@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2 (2026-10-06)
+
+- `key(i)` answers null, exactly as the game does, so a mod that lists keys to remove them changes nothing, as before.
+
 ## 1.0.1 (2026-10-06)
 
 - A store whose only remaining entry cannot be named is rebuilt around that entry (its text and slices kept) instead

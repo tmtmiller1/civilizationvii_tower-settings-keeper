@@ -44,7 +44,7 @@ test("round trip on any key, modSettings passed through, length 1, key(0)", () =
   assert.equal(ls.getItem("zzz-late"), "LATE");
   assert.equal(ls.getItem("never"), null);
   assert.equal(ls.length, 1);
-  assert.equal(ls.key(0), ROOT_KEY);
+  assert.equal(ls.key(0), null, "as the engine answers; a wipe loop over key(i) stays inert");
   assert.equal(ls.key(1), null);
   const view = JSON.parse(ls.getItem("modSettings"));
   assert.deepEqual(Object.keys(view).sort(), ["demographics", "demographics-halloffame", "emigration"]);
@@ -135,6 +135,15 @@ test("empty store: nothing written until the first write, then one marked row", 
   assert.equal(ls.length, 1);
   assert.equal(helperLoad(ls, "m", "o"), true);
   assert.ok(JSON.parse(ls.rows().modSettings)[MARK_KEY]);
+});
+
+test("a wipe loop over key(i) removes nothing, as it never did", () => {
+  const ls = fakeStore({ modSettings: HOF });
+  install(ls, opts());
+  ls.setItem("own", "v");
+  for (let i = 0; i < ls.length; i++) { const k = ls.key(i); if (k != null) ls.removeItem(k); }
+  assert.equal(JSON.parse(ls.getItem("modSettings")).demographics.x, 1);
+  assert.equal(ls.getItem("own"), "v");
 });
 
 test("the 2026-10-06 store: AutoMissionary row folded, the lone clobbered modSettings collapsed into a normal root", () => {
