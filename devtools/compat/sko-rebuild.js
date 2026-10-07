@@ -39,12 +39,11 @@ setTimeout(async () => {
     await later(6000);
     if (PHASE === "1") {
       emit("press: " + pressRow());
-      await later(1000);
-      emit("dialog DOM +1s: " + J(dialogState()));
-      emit("SHOT rebuild-1-dialog-1s");
-      await later(3000);
-      emit("dialog DOM +4s: " + J(dialogState()));
-      emit("SHOT rebuild-1-dialog-4s");
+      for (let i = 1; i <= 5; i++) {
+        await later(2000);
+        emit("dialog DOM +" + (2 * i) + "s: " + J(dialogState()));
+        emit("SHOT rebuild-1-dialog-" + i);
+      }
       await later(6000);
       const btns = dialogButtons();
       emit("dialog buttons: " + J(btns.map((b) => b.caption)));
