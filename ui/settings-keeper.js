@@ -28,7 +28,7 @@ export const VIRTUAL_KEY = "__ls";
 export const MARK_KEY = "__settings-keeper";
 export const BLOCKED_KEY = "__blocked";
 export const VERSION = 1; // layout of the keeper's mark
-export const BUILD = 110; // this file's build; a newer copy replaces an older installed one
+export const BUILD = 111; // this file's build; a newer copy replaces an older installed one
 const INTERNAL = [VIRTUAL_KEY, MARK_KEY, BLOCKED_KEY];
 const MAX_FOLD_STEPS = 32;
 const BLOCKED_COPY_LIMIT = 2 * 1024 * 1024;
@@ -95,6 +95,7 @@ class Keeper {
     this.log = typeof opts.log === "function" ? opts.log : () => {};
     this.known = Array.isArray(opts.knownKeys) ? opts.knownKeys : [];
     this.now = typeof opts.now === "function" ? opts.now : () => Date.now();
+    this.origin = typeof opts.origin === "string" ? opts.origin : "";
     this.engine = captureEngine(ls);
     this.rootKey = ROOT_KEY;
     this.cacheText = null;
@@ -528,8 +529,8 @@ class Keeper {
       Object.defineProperty(ls, "length", { get: () => this.length(), configurable: true, enumerable: false });
     }
     const api = {
-      build: BUILD, status: () => this.status(), uninstall: () => this.uninstall(), engine: this.engine,
-      rootKey: () => this.rootKey, flush: () => this.flush(), rebuild: () => this.rebuild()
+      build: BUILD, origin: this.origin, status: () => this.status(), uninstall: () => this.uninstall(),
+      engine: this.engine, rootKey: () => this.rootKey, flush: () => this.flush(), rebuild: () => this.rebuild()
     };
     def("__settingsKeeper", api);
     this.sync = false;
@@ -544,6 +545,22 @@ class Keeper {
 }
 
 /**
+ * Several mods may carry this file; the newest build wins. An older installed copy lands any write it still holds
+ * and uninstalls; an equal or newer one is kept.
+ * @returns {boolean} Whether this copy should install over the one found.
+ */
+function takeOver(current, opts) {
+  if (!(typeof current.build === "number" && current.build < BUILD)) return false;
+  if (typeof current.flush === "function") current.flush();
+  if (typeof current.uninstall === "function") current.uninstall();
+  if (typeof opts.log === "function") {
+    opts.log("warn", "build " + current.build + " from " + (current.origin || "?") + " replaced by build " + BUILD +
+      " from " + (opts.origin || "?"));
+  }
+  return true;
+}
+
+/**
  * Install the keeper on a Storage-like object. Idempotent: a second call returns the first keeper.
  * @param {Storage} ls The engine's localStorage.
  * @param {{log?: Function, knownKeys?: Array<{key: string, match: Function}>, now?: Function}} [opts]
@@ -552,12 +569,7 @@ class Keeper {
 export function install(ls, opts = {}) {
   if (!ls) return null;
   const current = ls.__settingsKeeper;
-  if (current) {
-    // several mods may carry this file; the newest build wins, an older one hands over after landing its writes
-    if (!(typeof current.build === "number" && current.build < BUILD)) return current;
-    if (typeof current.flush === "function") current.flush();
-    if (typeof current.uninstall === "function") current.uninstall();
-  }
+  if (current && !takeOver(current, opts)) return current;
   const keeper = new Keeper(ls, opts);
   keeper.locate();
   return keeper.patch();
@@ -601,13 +613,24 @@ function log(level, msg) {
   }
 }
 
+/** Which mod's folder this copy runs from, for the log line: several mods may carry the file. */
+function originOfThisCopy() {
+  try {
+    const u = String(import.meta.url);
+    const m = /^[a-z]+:\/\/[^/]+\/([^/]+)\//i.exec(u);
+    return m ? m[1] : u;
+  } catch (_) {
+    return "";
+  }
+}
+
 try {
   const ls = typeof localStorage !== "undefined" ? localStorage : null;
-  const api = install(ls, { log, knownKeys: KNOWN_KEYS });
+  const api = install(ls, { log, knownKeys: KNOWN_KEYS, origin: originOfThisCopy() });
   if (!api) log("error", "no localStorage in this context");
   else {
     const s = api.status();
-    log("warn", "ready: root " + JSON.stringify(s.rootKey) + ", rows " + s.rows + ", slices " + s.slices.length +
+    log("warn", "ready (build " + api.build + " from " + (api.origin || "?") + "): root " + JSON.stringify(s.rootKey) + ", rows " + s.rows + ", slices " + s.slices.length +
       ", keys kept " + s.virtualKeys.length + (s.folded.length ? ", moved " + s.folded.join(", ") : "") +
       (s.blocked ? ", BLOCKED by an unnamed row of " + s.blockedBytes + " bytes" : "") + (s.lengthShadowed ? "" : ", length not shadowed"));
     try {

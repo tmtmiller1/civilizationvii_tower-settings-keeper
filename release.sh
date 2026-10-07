@@ -29,7 +29,11 @@ rm -rf "$DIST_DIR"; mkdir -p "$TARGET_DIR"
 cp "$MODINFO" README.md CHANGELOG.md LICENSE "$TARGET_DIR/"
 cp -R ui text "$TARGET_DIR/"
 (cd "$DIST_DIR" && zip -qr "$ZIP_NAME" "$MOD_DIR" -x '*.DS_Store')
+# the modder-side kit: the one file plus its instructions
+EMBED_DIR="$DIST_DIR/settings-keeper-embed"; mkdir -p "$EMBED_DIR"
+cp ui/settings-keeper.js "$EMBED_DIR/"; cp embed/README.md "$EMBED_DIR/README.md"; cp LICENSE "$EMBED_DIR/"
+(cd "$DIST_DIR" && zip -qr "settings-keeper-embed-v${VERSION}.zip" settings-keeper-embed -x '*.DS_Store')
 
 echo "==> Zip contents"
 unzip -l "$DIST_DIR/$ZIP_NAME" | awk 'NR>3 && $4 != "" {print $4}' | grep -v '/$' | sort
-echo "==> $DIST_DIR/$ZIP_NAME ready (version $VERSION)"
+echo "==> $DIST_DIR/$ZIP_NAME and $DIST_DIR/settings-keeper-embed-v${VERSION}.zip ready (version $VERSION)"

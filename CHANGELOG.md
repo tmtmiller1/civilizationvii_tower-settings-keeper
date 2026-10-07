@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1 (2026-10-07)
+
+- Modder-side kit: `embed/README.md` and the release asset `settings-keeper-embed-<version>.zip` (the one file plus
+  instructions) for shipping the keeper inside another mod.
+- The log line names which mod's copy is running, and a build handoff says which copy replaced which.
+
 ## 1.1.0 (2026-10-07)
 
 - A "Rebuild storage" row in Options, Add-ons, shown only while the keeper is in its fallback layout (two or more

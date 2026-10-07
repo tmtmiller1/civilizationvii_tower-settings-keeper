@@ -78,8 +78,9 @@ script that may import the Options model because it only needs to run once the O
 registered hidden and shown only while `status().blocked`; a confirm dialog states the number of rows that go;
 `rebuild()` drops them and writes every slice and key the keeper holds back as the one normal row.
 
-Several mods may carry `settings-keeper.js`. `install()` keeps the first copy unless a later one has a higher
-`BUILD`, in which case the older copy lands its queued write, uninstalls, and the newer one installs.
+Several mods may carry `settings-keeper.js` (the modder-side kit, `embed/README.md`). `install()` keeps the first
+copy unless a later one has a higher `BUILD`, in which case the older copy lands its queued write, uninstalls, and
+the newer one installs; each copy logs the mod folder it ran from (`import.meta.url`) and a handoff names both.
 
 Once the root is row 1, `tidy()` removes raw rows hiding behind it for keys the root already holds (older copies
 nobody can read), so the real store is one row and the erase-on-second-entry helpers stay quiet even after the keeper
@@ -206,6 +207,11 @@ fallback layout (4 rows), the Rebuild storage row showed in Options, Add-ons fro
 game's own OK/Cancel dialog opened with the count ("3 stored entries..."), OK rebuilt the store (3 rows dropped, slices
 and keys kept, one row), the row hid, and the next launch was in the normal layout with the row hidden. Text is loaded
 in both scopes (first in-game run showed raw LOC keys; fixed before release).
+
+Build 111 beside an embedded build 110 (run `H-both`): the standalone copy ran first and logged
+`ready (build 111 from tower-settings-keeper)` (the origin comes from `import.meta.url`, which the runtime provides);
+Demographics' older copy found it and stood down. The reverse order, an older copy installed first and replaced by a
+newer one, is covered by the unit tests; which copy runs first is the loader's choice.
 
 Embedded copy (runs `E-clean`, `E-poison`, `E-both`, 2026-10-07): the same file listed first in Demographics' shell
 and game UIScripts, standalone mod NOT installed: first script line in both scopes, normal layout on the clean store,
