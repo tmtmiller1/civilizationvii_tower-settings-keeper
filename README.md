@@ -90,6 +90,12 @@ other mods would clear the store on its next save.
 
 ## For modders
 
+You can ship the keeper inside your own mod so your players get it without installing anything else: copy
+`ui/settings-keeper.js` unchanged into your mod and list it as the first UIScript of both your shell and game action
+groups (it imports nothing, so the loader runs it as early as any script). Several mods carrying it cost nothing:
+the first copy to load installs, the others find it and stand down, and a newer build replaces an older one. The
+Rebuild storage row stays with the standalone mod.
+
 Nothing changes in how you write settings code. The shared-slice pattern and own-key pattern both work. If your mod
 keeps a key of its own and you want an already-broken store repaired for your players, send the key name and a
 content check that identifies your data (see the `KNOWN_KEYS` list in `ui/settings-keeper.js`); the keeper only
