@@ -1,6 +1,7 @@
 #!/bin/zsh
 # run-compat.sh <label> <phase> [seed LocalStorage.sqlite]
 #   PAIRS_JSON=<file>   the harvested [{mod,opt,cur}] list for phases B and C (default [])
+#   NO_KEEPER=1                        do not install the standalone keeper (test a copy embedded in another mod)
 #   PROBE_SHELL=<js> PROBE_GAME=<js>   probe scripts to install (default skc-shell.js / skc-game.js); __PHASE__ and
 #                                      __PAIRS__ are substituted in both. A "[SKC] SHOT <name>" line captures the game
 #                                      window (by window id, never the display) to <run>/shot-<name>.png.
@@ -30,7 +31,7 @@ say "enabled for the run: ${EXTRA_LOCAL[*]}"
 
 # install: keeper (dev copy, ui + text + modinfo only), AutoMissionary, probe
 rm -rf "$MODS/tower-settings-keeper" "$MODS/AutoMissionary" "$MODS/skc-probe"
-mkdir -p "$MODS/tower-settings-keeper"; cp -R "$MOD/ui" "$MOD/text" "$MOD/tower-settings-keeper.modinfo" "$MODS/tower-settings-keeper/"
+if [ "${NO_KEEPER:-0}" != "1" ]; then mkdir -p "$MODS/tower-settings-keeper"; cp -R "$MOD/ui" "$MOD/text" "$MOD/tower-settings-keeper.modinfo" "$MODS/tower-settings-keeper/"; else say "NO_KEEPER=1: the standalone keeper is not installed for this run"; fi
 if [ -n "$AM_SRC" ] && [ -d "$AM_SRC" ]; then cp -R "$AM_SRC" "$MODS/AutoMissionary"; rm -rf "$MODS/AutoMissionary/workshop"; fi
 mkdir -p "$MODS/skc-probe/ui"; cp "$HERE/skc-probe.modinfo" "$MODS/skc-probe/"
 PAIRS="$(cat "${PAIRS_JSON:-/dev/null}" 2>/dev/null)"; [ -z "$PAIRS" ] && PAIRS="[]"
