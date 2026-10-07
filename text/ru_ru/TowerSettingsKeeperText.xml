@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <Replace Tag="LOC_SETTINGS_KEEPER_MOD_NAME" Language="ru_RU"><Text>Tower Settings Keeper</Text></Replace>
+        <Replace Tag="LOC_SETTINGS_KEEPER_MOD_DESCRIPTION" Language="ru_RU"><Text>Сохраняет настройки модов между перезапусками. Civilization VII при каждом чтении настроек возвращает первую сохранённую запись, какой бы мод её ни запрашивал, поэтому панели настроек сбрасываются при каждом запуске, а моды могут перезаписывать настройки друг друга. Этот мод хранит запись каждого мода в единственной строке, которую игра читает правильно, и отвечает из неё на все операции чтения и записи, в главном меню и в игре. Он работает с модами, которые не обновлялись под него, и не имеет собственных настроек.</Text></Replace>
+        <Replace Tag="LOC_OPTIONS_GROUP_TOWER_SETTINGS_KEEPER" Language="ru_RU"><Text>Tower Settings Keeper</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_LABEL" Language="ru_RU"><Text>Хранилище требует перестройки</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CAPTION" Language="ru_RU"><Text>Перестроить хранилище</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_DESCRIPTION" Language="ru_RU"><Text>Некоторые сохранённые записи стоят перед общими настройками, и мод не может определить, какой мод их записал, поэтому он хранит настройки в резервной раскладке. Перестройка удаляет эти записи и записывает всё, что хранит мод, одной записью. Все настройки и ключи модов, которые хранит мод, сохраняются.</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CONFIRM_TITLE" Language="ru_RU"><Text>Перестроить хранилище?</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CONFIRM_BODY" Language="ru_RU"><Text>Будет удалено сохранённых записей, которые мод не смог опознать: {1_Count}. Все хранимые настройки и ключи модов сохраняются. Это действие нельзя отменить.</Text></Replace>
+    </LocalizedText>
+</Database>

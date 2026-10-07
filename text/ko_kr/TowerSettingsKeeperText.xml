@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <Replace Tag="LOC_SETTINGS_KEEPER_MOD_NAME" Language="ko_KR"><Text>Tower Settings Keeper</Text></Replace>
+        <Replace Tag="LOC_SETTINGS_KEEPER_MOD_DESCRIPTION" Language="ko_KR"><Text>모드 설정을 재시작 후에도 유지합니다. Civilization VII는 어느 모드가 요청하든 설정을 읽을 때 가장 먼저 저장된 항목을 돌려주기 때문에, 옵션 패널이 실행할 때마다 초기화되고 모드끼리 서로의 설정을 덮어쓸 수 있습니다. 이 모드는 각 모드의 항목을 게임이 올바르게 읽는 단 하나의 행 안에 보관하고, 메인 메뉴와 게임 안에서 모든 읽기와 쓰기에 그 행으로 응답합니다. 이 모드에 맞춰 갱신되지 않은 모드와도 함께 작동하며, 자체 설정은 없습니다.</Text></Replace>
+        <Replace Tag="LOC_OPTIONS_GROUP_TOWER_SETTINGS_KEEPER" Language="ko_KR"><Text>Tower Settings Keeper</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_LABEL" Language="ko_KR"><Text>저장소를 다시 구성해야 합니다</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CAPTION" Language="ko_KR"><Text>저장소 다시 구성</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_DESCRIPTION" Language="ko_KR"><Text>일부 저장 항목이 공유 설정보다 앞에 정렬되어 있고 어느 모드가 썼는지 알 수 없어, 이 모드는 설정을 예비 배치로 보관하고 있습니다. 다시 구성하면 그 항목들을 삭제하고 이 모드가 보관한 모든 것을 하나의 항목으로 다시 씁니다. 이 모드가 보관한 모든 모드 설정과 키는 유지됩니다.</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CONFIRM_TITLE" Language="ko_KR"><Text>저장소를 다시 구성할까요?</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CONFIRM_BODY" Language="ko_KR"><Text>이 모드가 식별하지 못한 저장 항목 {1_Count}개가 삭제됩니다. 보관 중인 모든 모드 설정과 키는 유지됩니다. 이 작업은 되돌릴 수 없습니다.</Text></Replace>
+    </LocalizedText>
+</Database>

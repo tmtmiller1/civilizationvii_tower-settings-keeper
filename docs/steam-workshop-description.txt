@@ -1,5 +1,5 @@
 [h1]Tower Settings Keeper[/h1]
-[b]Version 1.1.3. For Civilization VII 1.5.0.[/b]
+[b]Version 1.2.0. For Civilization VII 1.5.0. In all eleven languages the game supports.[/b]
 With this mod installed, the options you set in other mods stay set after you restart the game. It has no options of its own, does not change gameplay, and needs no setup.
 [h2]The problem[/h2]
 Mods keep their settings in the game's saved-settings store. That store has a bug: a read returns the first entry in it, no matter which entry was asked for, and there is no way to list the entries. A mod can read its own settings only if its entry happens to sort first. Every other mod gets a different mod's data, treats it as its own, and writes it back under its own name the next time it saves. Players see options panels that reset between launches, and sometimes one mod's settings showing up inside another. About fifty Workshop mods also include a helper that clears the whole store as soon as it sees a second entry, so one mod that stores its settings under its own entry wipes every other mod's settings on the next save.
@@ -9,8 +9,10 @@ Mods keep their settings in the game's saved-settings store. That store has a bu
 [*]Options panels that share the usual settings entry work as before. Mods that use their own entry get it stored and read back under that name.
 [*]The store always reports a single entry, so the clear-on-second-entry helper never runs.
 [*]If another mod has already pushed the store out of order, it moves the entries it can identify into place, leaves the rest alone, and checks again on every launch. It never overwrites another mod's data.
-[*]Other mods do not need updates. It works with the mods already on the Workshop.
+[*]Other mods do not need updates. It works with the mods already on the Workshop. Mod authors do not have to change anything.
 [/list]
+[h2]Works with every mod[/h2]
+Install this mod and the settings of every mod you have are kept, as those mods are today. Mod authors do not need to do anything. As an extra option, a mod author can ship the same file inside their own mod, so their players are covered even without this mod. A mod that ships the file and this mod can be installed together. Only one copy runs, the newest one.
 [h2]Things to know[/h2]
 [list]
 [*]Settings you save from now on stay. Settings that were lost before you installed the mod are gone, unless they are still on disk under an entry the mod can identify.
@@ -19,7 +21,7 @@ Mods keep their settings in the game's saved-settings store. That store has a bu
 [*]Tested on 1.5.0 with 28 mods, including the common options helpers, mods that use their own entry, and a settings manager. The full test record is on GitHub.
 [/list]
 [h2]For modders[/h2]
-You can ship this fix inside your own mod, so your players get it without installing anything else. Copy ui/settings-keeper.js from this mod's folder without changing it, list it as the first UIScript of both your shell and game action groups, and keep your settings code as it is. The file embed/README.md in the same folder has the rules and the storage layout. Several mods can carry the file at once. The first copy to load installs, later copies find it and do nothing, and a newer build replaces an older one.
+Nothing is required of you. Your mod's settings work with this mod installed, whatever storage pattern your mod uses. If you want your players covered without them installing this mod, you can ship this fix inside your own mod, so your players get it without installing anything else. Copy ui/settings-keeper.js from this mod's folder without changing it, list it as the first UIScript of both your shell and game action groups, and keep your settings code as it is. The file embed/README.md in the same folder has the rules and the storage layout. Several mods can carry the file at once. The first copy to load installs, later copies find it and do nothing, and a newer build replaces an older one.
 [h2]Source and documentation[/h2]
 [list]
 [*][url=https://github.com/tmtmiller1/civilizationvii_tower-settings-keeper]Source, design notes and the test record on GitHub[/url], and the [url=https://github.com/tmtmiller1/civilizationvii_tower-settings-keeper/releases]releases[/url], with the zip for a manual install and the kit for modders.

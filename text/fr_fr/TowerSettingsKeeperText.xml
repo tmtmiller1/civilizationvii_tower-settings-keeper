@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <Replace Tag="LOC_SETTINGS_KEEPER_MOD_NAME" Language="fr_FR"><Text>Tower Settings Keeper</Text></Replace>
+        <Replace Tag="LOC_SETTINGS_KEEPER_MOD_DESCRIPTION" Language="fr_FR"><Text>Conserve les réglages des mods d'un redémarrage à l'autre. Civilization VII renvoie la première entrée enregistrée à chaque lecture des réglages, quel que soit le mod qui la demande. Les panneaux d'options se réinitialisent donc d'un lancement à l'autre et les mods peuvent écraser mutuellement leurs réglages. Ce mod conserve l'entrée de chaque mod dans la seule ligne que le jeu lit correctement et répond à toutes les lectures et écritures à partir de celle-ci, dans le menu principal comme en partie. Il fonctionne avec les mods qui n'ont pas été mis à jour pour lui et n'a aucun réglage propre.</Text></Replace>
+        <Replace Tag="LOC_OPTIONS_GROUP_TOWER_SETTINGS_KEEPER" Language="fr_FR"><Text>Tower Settings Keeper</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_LABEL" Language="fr_FR"><Text>Le stockage doit être reconstruit</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CAPTION" Language="fr_FR"><Text>Reconstruire le stockage</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_DESCRIPTION" Language="fr_FR"><Text>Certaines entrées enregistrées se classent avant les réglages partagés et le mod ne peut pas déterminer quel mod les a écrites. Il conserve donc les réglages dans une disposition de secours. La reconstruction supprime ces entrées et réécrit tout ce que le mod détient en une seule entrée. Tous les réglages et toutes les clés de mods que le mod détient sont conservés.</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CONFIRM_TITLE" Language="fr_FR"><Text>Reconstruire le stockage ?</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CONFIRM_BODY" Language="fr_FR"><Text>{1_Count} entrées enregistrées que le mod n'a pas pu identifier seront supprimées. Tous les réglages et toutes les clés de mods qu'il détient sont conservés. Cette action est irréversible.</Text></Replace>
+    </LocalizedText>
+</Database>

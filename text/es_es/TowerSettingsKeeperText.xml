@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <Replace Tag="LOC_SETTINGS_KEEPER_MOD_NAME" Language="es_ES"><Text>Tower Settings Keeper</Text></Replace>
+        <Replace Tag="LOC_SETTINGS_KEEPER_MOD_DESCRIPTION" Language="es_ES"><Text>Conserva la configuración de los mods entre reinicios. Civilization VII devuelve la primera entrada guardada en cada lectura de configuración, sin importar qué mod la pida, así que los paneles de opciones se reinician entre sesiones y los mods pueden sobrescribirse la configuración unos a otros. Este mod guarda la entrada de cada mod dentro de la única fila que el juego lee correctamente y responde desde ella a todas las lecturas y escrituras, en el menú principal y en la partida. Funciona con mods que no han sido actualizados para él y no tiene configuración propia.</Text></Replace>
+        <Replace Tag="LOC_OPTIONS_GROUP_TOWER_SETTINGS_KEEPER" Language="es_ES"><Text>Tower Settings Keeper</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_LABEL" Language="es_ES"><Text>El almacenamiento necesita reconstruirse</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CAPTION" Language="es_ES"><Text>Reconstruir almacenamiento</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_DESCRIPTION" Language="es_ES"><Text>Algunas entradas guardadas se ordenan antes que la configuración compartida y el mod no puede saber qué mod las escribió, así que mantiene la configuración en una disposición de reserva. Al reconstruir se eliminan esas entradas y todo lo que el mod conserva se vuelve a escribir como una sola entrada. Se conservan todas las configuraciones y claves de mods que el mod guarda.</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CONFIRM_TITLE" Language="es_ES"><Text>¿Reconstruir el almacenamiento?</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CONFIRM_BODY" Language="es_ES"><Text>Se eliminarán {1_Count} entradas guardadas que el mod no pudo identificar. Se conservan todas las configuraciones y claves de mods que guarda. Esta acción no se puede deshacer.</Text></Replace>
+    </LocalizedText>
+</Database>

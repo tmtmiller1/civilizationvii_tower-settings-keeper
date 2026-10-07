@@ -13,7 +13,7 @@
         <Authors>Tower</Authors>
         <Package>TowerSettingsKeeper</Package>
         <PackageSortIndex>1</PackageSortIndex>
-        <Version>1.1.3</Version>
+        <Version>1.2.0</Version>
         <AffectsSavedGames>0</AffectsSavedGames>
     </Properties>
     <Dependencies>
@@ -28,6 +28,17 @@
             <Actions>
                 <UpdateText>
                     <Item>text/en_us/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="de_DE">text/de_de/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="es_ES">text/es_es/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="fr_FR">text/fr_fr/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="it_IT">text/it_it/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="ja_JP">text/ja_jp/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="ko_KR">text/ko_kr/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="pl_PL">text/pl_pl/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="pt_BR">text/pt_br/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="ru_RU">text/ru_ru/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="zh_Hans_CN">text/zh_cn/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="zh_Hant_HK">text/zh_hk/TowerSettingsKeeperText.xml</Item>
                 </UpdateText>
                 <UIScripts>
                     <Item>ui/settings-keeper.js</Item>
@@ -40,6 +51,17 @@
             <Actions>
                 <UpdateText>
                     <Item>text/en_us/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="de_DE">text/de_de/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="es_ES">text/es_es/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="fr_FR">text/fr_fr/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="it_IT">text/it_it/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="ja_JP">text/ja_jp/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="ko_KR">text/ko_kr/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="pl_PL">text/pl_pl/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="pt_BR">text/pt_br/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="ru_RU">text/ru_ru/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="zh_Hans_CN">text/zh_cn/TowerSettingsKeeperText.xml</Item>
+                    <Item locale="zh_Hant_HK">text/zh_hk/TowerSettingsKeeperText.xml</Item>
                 </UpdateText>
                 <UIScripts>
                     <Item>ui/settings-keeper.js</Item>

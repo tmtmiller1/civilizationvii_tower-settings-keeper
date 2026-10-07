@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <Replace Tag="LOC_SETTINGS_KEEPER_MOD_NAME" Language="ja_JP"><Text>Tower Settings Keeper</Text></Replace>
+        <Replace Tag="LOC_SETTINGS_KEEPER_MOD_DESCRIPTION" Language="ja_JP"><Text>Modの設定を再起動後も保持します。Civilization VIIは、どのModが要求しても設定の読み取りに対して最初に保存された項目を返すため、オプション画面は起動のたびにリセットされ、Mod同士が設定を上書きしてしまうことがあります。このModは各Modの項目を、ゲームが正しく読み取れる唯一の行の中に保持し、メインメニューでもゲーム中でも、すべての読み書きにその行から応答します。このModに対応していないModでも動作し、独自の設定はありません。</Text></Replace>
+        <Replace Tag="LOC_OPTIONS_GROUP_TOWER_SETTINGS_KEEPER" Language="ja_JP"><Text>Tower Settings Keeper</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_LABEL" Language="ja_JP"><Text>ストレージの再構築が必要です</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CAPTION" Language="ja_JP"><Text>ストレージを再構築</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_DESCRIPTION" Language="ja_JP"><Text>共有設定より前に並ぶ保存項目があり、どのModが書き込んだのか判別できないため、このModは設定を予備の配置で保持しています。再構築するとそれらの項目を削除し、このModが保持しているすべてを1つの項目として書き戻します。このModが保持しているModの設定とキーはすべて保持されます。</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CONFIRM_TITLE" Language="ja_JP"><Text>ストレージを再構築しますか？</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CONFIRM_BODY" Language="ja_JP"><Text>このModが判別できなかった保存項目{1_Count}件を削除します。保持しているModの設定とキーはすべて残ります。この操作は元に戻せません。</Text></Replace>
+    </LocalizedText>
+</Database>

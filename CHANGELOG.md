@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0] - 2026-10-07
+
+- The mod's text, including the Rebuild storage row and its confirmation, is translated into all eleven languages the
+  game supports: German, Spanish, French, Italian, Japanese, Korean, Polish, Portuguese (Brazil), Russian, Simplified
+  Chinese and Traditional Chinese.
+- The documentation and the Workshop page say plainly that the mod works with every mod as it is, that mod authors
+  need to do nothing, and that shipping the file inside a mod is an extra option for authors.
+
 ## [1.1.3] - 2026-10-07
 
 - Clearer wording in the in-game text, the Options row and the documentation. No change in behaviour.

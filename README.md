@@ -26,7 +26,15 @@ It keeps every entry inside the one row the game can read, and answers every `lo
 - If another mod has already pushed the store out of order, the mod moves the entries it can identify into place
   and leaves the rest alone. It checks again on every launch.
 
-Other mods do not need updates. It works with the mods already on the Workshop.
+## Works with every mod, no changes needed
+
+This mod fixes the problem for every mod that stores settings, as those mods are today. Mod authors do not have to
+change anything, and there is nothing for them to register. A player who installs this mod gets working settings in
+all of their mods at once.
+
+Mod authors have one extra option. They can ship the same file inside their own mod, so their players are covered
+even if they never install this mod. That is described under For modders below. A mod that ships the file and this
+mod can be installed together. Only one copy runs, the newest one, and the rest do nothing.
 
 ## Screenshots
 
@@ -71,6 +79,7 @@ Content. There is nothing to configure.
 - The game does not guarantee the order mod scripts run in. A mod that reads its settings at the moment its script
   loads, before this mod has run, sees the old behaviour for that one launch. In every test launch so far this mod
   ran first.
+- The mod's own text is translated into all eleven languages the game supports.
 - Nothing appears on screen, apart from one line in `Logs/UI.log` that starts with `[settings-keeper] ready:`. The
   exception is the fallback case above. Then Options, Add-ons shows a "Rebuild storage" row. Press it, confirm, and
   the entries the mod could not identify are deleted and the store is written back as one entry. The row goes away
@@ -89,8 +98,12 @@ mods will wipe the store on its next save.
 
 ## For modders
 
-You can ship this fix inside your own mod. Players then get it without installing anything else. It is one file and
-two lines in your modinfo, and your settings code stays as it is. See [embed/README.md](embed/README.md), or
+Nothing is required of you. Your mod's settings work with this mod installed, whether your mod uses the shared
+`modSettings` entry or its own key, and whatever helper code it uses.
+
+If you want your players covered without them installing this mod, you can ship the fix inside your own mod.
+Players then get it without installing anything else. It is one file and two lines in your modinfo, and your
+settings code stays as it is. See [embed/README.md](embed/README.md), or
 download `settings-keeper-embed-<version>.zip` from the latest release. Several mods can carry the file at once.
 The first copy to load installs, later copies find it and do nothing, and a newer build replaces an older one.
 

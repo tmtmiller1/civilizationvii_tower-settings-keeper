@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <Replace Tag="LOC_SETTINGS_KEEPER_MOD_NAME" Language="pt_BR"><Text>Tower Settings Keeper</Text></Replace>
+        <Replace Tag="LOC_SETTINGS_KEEPER_MOD_DESCRIPTION" Language="pt_BR"><Text>Mantém as configurações dos mods entre reinicializações. O Civilization VII devolve a primeira entrada salva em toda leitura de configurações, não importa qual mod pediu, então os painéis de opções voltam ao padrão a cada abertura e os mods podem sobrescrever as configurações uns dos outros. Este mod guarda a entrada de cada mod dentro da única linha que o jogo lê corretamente e responde a partir dela a todas as leituras e gravações, no menu principal e na partida. Funciona com mods que não foram atualizados para ele e não tem configurações próprias.</Text></Replace>
+        <Replace Tag="LOC_OPTIONS_GROUP_TOWER_SETTINGS_KEEPER" Language="pt_BR"><Text>Tower Settings Keeper</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_LABEL" Language="pt_BR"><Text>O armazenamento precisa ser reconstruído</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CAPTION" Language="pt_BR"><Text>Reconstruir armazenamento</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_DESCRIPTION" Language="pt_BR"><Text>Algumas entradas salvas ficam antes das configurações compartilhadas e o mod não consegue saber qual mod as gravou, então ele mantém as configurações em uma disposição reserva. A reconstrução apaga essas entradas e grava de volta tudo o que o mod guarda como uma única entrada. Todas as configurações e chaves de mods guardadas pelo mod são mantidas.</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CONFIRM_TITLE" Language="pt_BR"><Text>Reconstruir o armazenamento?</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CONFIRM_BODY" Language="pt_BR"><Text>{1_Count} entradas salvas que o mod não conseguiu identificar serão apagadas. Todas as configurações e chaves de mods que ele guarda são mantidas. Isso não pode ser desfeito.</Text></Replace>
+    </LocalizedText>
+</Database>

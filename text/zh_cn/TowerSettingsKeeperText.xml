@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <Replace Tag="LOC_SETTINGS_KEEPER_MOD_NAME" Language="zh_Hans_CN"><Text>Tower Settings Keeper</Text></Replace>
+        <Replace Tag="LOC_SETTINGS_KEEPER_MOD_DESCRIPTION" Language="zh_Hans_CN"><Text>让 Mod 设置在重启后得以保留。《文明VII》在每次读取设置时都会返回最先保存的那条记录，无论是哪个 Mod 在读取，因此选项面板会在每次启动后重置，Mod 之间也可能互相覆盖设置。本 Mod 把每个 Mod 的记录都保存在游戏能够正确读取的唯一一行中，并在主菜单和游戏内从该行应答所有读写。它对未针对本 Mod 更新的 Mod 同样有效，且没有自己的设置。</Text></Replace>
+        <Replace Tag="LOC_OPTIONS_GROUP_TOWER_SETTINGS_KEEPER" Language="zh_Hans_CN"><Text>Tower Settings Keeper</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_LABEL" Language="zh_Hans_CN"><Text>存储需要重建</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CAPTION" Language="zh_Hans_CN"><Text>重建存储</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_DESCRIPTION" Language="zh_Hans_CN"><Text>有些已保存的记录排在共享设置之前，而本 Mod 无法判断它们是由哪个 Mod 写入的，因此目前以备用布局保存设置。重建会删除这些记录，并把本 Mod 保存的全部内容作为一条记录写回。本 Mod 保存的所有 Mod 设置和键都会保留。</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CONFIRM_TITLE" Language="zh_Hans_CN"><Text>重建存储？</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CONFIRM_BODY" Language="zh_Hans_CN"><Text>将删除 {1_Count} 条本 Mod 无法识别的已保存记录。本 Mod 保存的所有 Mod 设置和键都会保留。此操作无法撤销。</Text></Replace>
+    </LocalizedText>
+</Database>

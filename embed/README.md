@@ -1,7 +1,9 @@
 # Shipping the fix inside your own mod
 
-One file and two lines in your modinfo. Your players get settings that survive a restart without installing
-anything else, and your settings code does not change.
+This is optional. The Tower Settings Keeper mod already fixes settings for every mod a player has installed, with no
+change to those mods. Shipping the file inside your own mod covers your players even if they never install the
+keeper. It is one file and two lines in your modinfo. Your players get settings that survive a restart without
+installing anything else, and your settings code does not change.
 
 ## The bug
 

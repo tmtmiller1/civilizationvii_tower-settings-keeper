@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <Replace Tag="LOC_SETTINGS_KEEPER_MOD_NAME" Language="pl_PL"><Text>Tower Settings Keeper</Text></Replace>
+        <Replace Tag="LOC_SETTINGS_KEEPER_MOD_DESCRIPTION" Language="pl_PL"><Text>Zachowuje ustawienia modów po ponownym uruchomieniu gry. Civilization VII przy każdym odczycie ustawień zwraca pierwszy zapisany wpis, niezależnie od tego, który mod o niego pyta, więc panele opcji resetują się między uruchomieniami, a mody mogą nadpisywać sobie nawzajem ustawienia. Ten mod przechowuje wpis każdego moda w jedynym wierszu, który gra odczytuje poprawnie, i z niego obsługuje wszystkie odczyty i zapisy, w menu głównym i w rozgrywce. Działa z modami, które nie zostały do niego dostosowane, i nie ma własnych ustawień.</Text></Replace>
+        <Replace Tag="LOC_OPTIONS_GROUP_TOWER_SETTINGS_KEEPER" Language="pl_PL"><Text>Tower Settings Keeper</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_LABEL" Language="pl_PL"><Text>Magazyn wymaga przebudowy</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CAPTION" Language="pl_PL"><Text>Przebuduj magazyn</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_DESCRIPTION" Language="pl_PL"><Text>Niektóre zapisane wpisy sortują się przed wspólnymi ustawieniami, a mod nie potrafi ustalić, który mod je zapisał, dlatego przechowuje ustawienia w układzie zastępczym. Przebudowa usuwa te wpisy i zapisuje wszystko, co mod przechowuje, jako jeden wpis. Wszystkie ustawienia i klucze modów przechowywane przez mod zostają zachowane.</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CONFIRM_TITLE" Language="pl_PL"><Text>Przebudować magazyn?</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CONFIRM_BODY" Language="pl_PL"><Text>Zostanie usuniętych {1_Count} zapisanych wpisów, których mod nie zdołał rozpoznać. Wszystkie przechowywane ustawienia i klucze modów zostają zachowane. Tej operacji nie można cofnąć.</Text></Replace>
+    </LocalizedText>
+</Database>

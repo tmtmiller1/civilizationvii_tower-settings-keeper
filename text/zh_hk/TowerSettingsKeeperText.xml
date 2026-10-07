@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database>
+    <LocalizedText>
+        <Replace Tag="LOC_SETTINGS_KEEPER_MOD_NAME" Language="zh_Hant_HK"><Text>Tower Settings Keeper</Text></Replace>
+        <Replace Tag="LOC_SETTINGS_KEEPER_MOD_DESCRIPTION" Language="zh_Hant_HK"><Text>讓模組設定在重新啟動後得以保留。《文明帝國VII》每次讀取設定時都會傳回最先儲存的那筆項目，不論是哪個模組在讀取，因此選項面板會在每次啟動後重設，模組之間也可能互相覆寫設定。本模組把每個模組的項目都保存在遊戲能正確讀取的唯一一列中，並在主選單和遊戲內從該列回應所有讀寫。它對未針對本模組更新的模組同樣有效，且沒有自己的設定。</Text></Replace>
+        <Replace Tag="LOC_OPTIONS_GROUP_TOWER_SETTINGS_KEEPER" Language="zh_Hant_HK"><Text>Tower Settings Keeper</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_LABEL" Language="zh_Hant_HK"><Text>儲存空間需要重建</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CAPTION" Language="zh_Hant_HK"><Text>重建儲存空間</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_DESCRIPTION" Language="zh_Hant_HK"><Text>有些已儲存的項目排在共用設定之前，而本模組無法判斷它們是由哪個模組寫入的，因此目前以備用配置保存設定。重建會刪除這些項目，並把本模組保存的全部內容寫回為一筆項目。本模組保存的所有模組設定與鍵值都會保留。</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CONFIRM_TITLE" Language="zh_Hant_HK"><Text>重建儲存空間？</Text></Replace>
+        <Replace Tag="LOC_TSK_REBUILD_CONFIRM_BODY" Language="zh_Hant_HK"><Text>將刪除 {1_Count} 筆本模組無法辨識的已儲存項目。本模組保存的所有模組設定與鍵值都會保留。此操作無法復原。</Text></Replace>
+    </LocalizedText>
+</Database>
