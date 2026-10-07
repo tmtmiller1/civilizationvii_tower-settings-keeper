@@ -102,6 +102,8 @@ class Keeper {
     this.foreign = false;
     this.blocked = false;
     this.folded = [];
+    this.sync = true; // start-up writes go straight to the engine; after patch() they are coalesced per task
+    this.pending = null;
   }
 
   // ---- the real row ---------------------------------------------------------------------------------------------
@@ -112,6 +114,7 @@ class Keeper {
    * writes refused) rather than copy it over the root. The next launch's start-up scan deals with it.
    */
   readRoot() {
+    if (this.pending) return this.pending;
     let text = null;
     try {
       text = this.engine.get(this.rootKey);
@@ -147,9 +150,29 @@ class Keeper {
     return this.cachePublic || null;
   }
 
+  /**
+   * Serialising a root of several hundred KB costs milliseconds, so after start-up a write only updates the root in
+   * hand and queues one engine write for the end of the current task: a burst of writes (a chunked backup) costs one
+   * serialisation, and reads in between see the new values. Nothing else can run before the queued write lands.
+   */
   writeRoot(root) {
     if (!isPlainObject(root[MARK_KEY])) root[MARK_KEY] = { v: VERSION, root: this.rootKey, since: this.now() };
     else root[MARK_KEY].root = this.rootKey;
+    if (this.sync) return this.flushRoot(root);
+    const queued = !!this.pending;
+    this.pending = root;
+    this.cachePublic = null;
+    if (!queued) Promise.resolve().then(() => this.flush());
+  }
+
+  flush() {
+    const root = this.pending;
+    if (!root) return;
+    this.pending = null;
+    this.flushRoot(root);
+  }
+
+  flushRoot(root) {
     const text = JSON.stringify(root);
     this.engine.set(this.rootKey, text);
     this.setCache(text, root);
@@ -431,6 +454,7 @@ class Keeper {
 
   /** Empties the real store and rewrites the root with the other mods' keys kept; also leaves blocked mode. */
   clear() {
+    this.pending = null;
     const root = this.readRoot();
     const virt = root && isPlainObject(root[VIRTUAL_KEY]) ? root[VIRTUAL_KEY] : {};
     this.engine.clear();
@@ -455,6 +479,7 @@ class Keeper {
   // ---- patch -----------------------------------------------------------------------------------------------------
 
   status() {
+    this.flush();
     const root = this.readRoot();
     const virt = root && isPlainObject(root[VIRTUAL_KEY]) ? Object.keys(root[VIRTUAL_KEY]) : [];
     return {
@@ -480,13 +505,16 @@ class Keeper {
       Object.defineProperty(ls, "length", { get: () => this.length(), configurable: true, enumerable: false });
     }
     const api = {
-      status: () => this.status(), uninstall: () => this.uninstall(), engine: this.engine, rootKey: () => this.rootKey
+      status: () => this.status(), uninstall: () => this.uninstall(), engine: this.engine, rootKey: () => this.rootKey,
+      flush: () => this.flush()
     };
     def("__settingsKeeper", api);
+    this.sync = false;
     return api;
   }
 
   uninstall() {
+    this.flush();
     for (const n of ["getItem", "setItem", "removeItem", "clear", "key", "length", "__settingsKeeper"]) delete this.ls[n];
   }
 }

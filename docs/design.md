@@ -46,7 +46,16 @@ Every method on the engine's `localStorage` object is replaced in place (own pro
   write `modSettings` back) therefore keeps the other mods' keys and returns a fallback-mode store to the normal
   layout.
 
-The row is re-read from the engine on every call (one SQLite query) and re-parsed only when its text changed.
+The row is re-read from the engine on every call (one SQLite query, about 1.8 ms for a 530 KB row, the same cost the
+engine's own read has) and re-parsed only when its text changed. Serialising the root costs about 7.5 ms at that size,
+so after start-up a write only updates the root in hand and queues one engine write for the end of the current
+JavaScript task (`Promise.resolve().then(flush)`): a burst of writes costs one serialisation, reads in between are
+served from the root in hand, and nothing else can run before the queued write lands. Start-up repairs, `clear()`,
+`status()` and `uninstall()` write synchronously. Measured 2026-10-06 (run `P1`, before coalescing): one own-key
+write 5.4 ms median; sixty 6 KB chunk writes 595 ms in total; a ModOptions-style save 27 ms end to end (about 16 ms
+before the keeper, since those mods already rewrote this row). After coalescing (run `P2`): sixty own-key writes
+1.2 ms inside the task, sixty 6 KB chunk writes 0.1 ms, reads while a write is queued 0 ms, a ModOptions-style save
+15 ms; the one queued write (serialise plus engine write, about 8 ms) lands at the end of the task.
 
 ## Start-up: making the root row 1
 
@@ -121,8 +130,8 @@ Known limits, by design:
 - Script order is not promised by the loader; see Script order. Watched first in every launch as one file.
 - The probe can overwrite a hidden row that happens to carry a guessed key; the key list is content-gated and the
   single-row rule applies to unmarked roots, so no probe has hit a hidden row in any run or test.
-- Every write rewrites the whole row (the shared root can be several hundred KB with Demographics' history in it);
-  mods that write every turn (History and Rankings) now write that much per turn.
+- Every write serialises the whole row (several hundred KB with Demographics' history in it): about 8 ms per task
+  that writes, whatever the number of writes in it (1.0.3). A mod that saves every turn adds that much per turn.
 - With the keeper removed in fallback mode, the erase-on-second-entry helpers would clear the store on their next
   save; the README says to repair first.
 

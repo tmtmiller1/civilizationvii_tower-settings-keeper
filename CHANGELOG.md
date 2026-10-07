@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.3 (2026-10-06)
+
+- Writes made in the same moment are combined into one engine write (reads in between see them at once), so a mod
+  that saves many pieces in a row no longer stalls the game for the sum of them. Measured with a 530 KB store: sixty
+  consecutive writes went from 0.6 s to one write of about 8 ms.
+
 ## 1.0.2 (2026-10-06)
 
 - `key(i)` answers null, exactly as the game does, so a mod that lists keys to remove them changes nothing, as before.
