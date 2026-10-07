@@ -7,3 +7,5 @@ devtools/compat/runs/
 devtools/compat/winid-bin
 devtools/compat/_built-*
 devtools/compat/runs-*.out
+steam/*.jpg
+steam/originals/

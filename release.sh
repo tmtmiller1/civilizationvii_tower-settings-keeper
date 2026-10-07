@@ -41,6 +41,10 @@ cp "$MODINFO" README.md CHANGELOG.md LICENSE "$TARGET_DIR/"
 cp -R ui text "$TARGET_DIR/"
 cp embed/README.md "$TARGET_DIR/embed/README.md"
 mkdir -p "$TARGET_DIR/docs"; cp -R docs/readme "$TARGET_DIR/docs/readme"
+# Workshop preview: the mod's emblem, 1024x1024, rendered from docs/workshop-preview.svg. Set by hand on the Workshop
+# page; never listed in the manifest, since steamcmd rejects a preview sent that way.
+if command -v rsvg-convert >/dev/null 2>&1; then rsvg-convert -w 1024 -h 1024 docs/workshop-preview.svg -o docs/workshop-preview.png; fi
+cp docs/workshop-preview.png "$DIST_DIR/preview.png" && echo "==> Workshop preview: $DIST_DIR/preview.png"
 (cd "$DIST_DIR" && zip -qr "$ZIP_NAME" "$MOD_DIR" -x '*.DS_Store')
 
 # the modder-side kit: the one file plus its instructions

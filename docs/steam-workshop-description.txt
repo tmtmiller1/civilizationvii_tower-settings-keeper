@@ -1,30 +1,39 @@
 [h1]Tower Settings Keeper[/h1]
 [b]Version 1.3.0. For Civilization VII 1.5.0. In all eleven languages the game supports.[/b]
-With this mod installed, the options you set in other mods stay set after you restart the game. It has no options of its own, does not change gameplay, and needs no setup.
-[h2]The problem[/h2]
-Mods keep their settings in the game's saved-settings store. That store has a bug: a read returns the first entry in it, no matter which entry was asked for, and there is no way to list the entries. A mod can read its own settings only if its entry happens to sort first. Every other mod gets a different mod's data, treats it as its own, and writes it back under its own name the next time it saves. Players see options panels that reset between launches, and sometimes one mod's settings showing up inside another. About fifty Workshop mods also include a helper that clears the whole store as soon as it sees a second entry, so one mod that stores its settings under its own entry wipes every other mod's settings on the next save.
-[h2]What the mod does[/h2]
+With this mod installed, the options you set in other mods stay set after you restart the game. It has no options of its own, does not change gameplay, and needs no setup. Install it, enable it, and every mod you have keeps its settings.
+[h2]The problem it fixes[/h2]
+Mods keep their settings in the game's saved-settings store, the same place a web page would use. In Civilization VII 1.5.0 that store has a bug. A read returns the first entry in the store, no matter which entry was asked for, and there is no way to list the entries. A mod can read its own settings only if its entry happens to sort first. Every other mod gets a different mod's data, treats it as its own, and writes it back under its own name the next time it saves.
+What players see: options panels that reset every launch, a mod that was set up last night back on its defaults, and sometimes one mod's settings showing up inside another's panel. About fifty Workshop mods also include a helper that clears the whole store as soon as it sees a second entry, so one mod that stores its settings under its own entry wipes every other mod's settings on the next save.
+[h2]How it works[/h2]
+The mod runs before any other mod script and takes over the game's settings store in place. From then on:
 [list]
-[*]Keeps every mod's entry inside the one row the game can read and answers every read and write from that row.
-[*]Options panels that share the usual settings entry work as before. Mods that use their own entry get it stored and read back under that name.
-[*]The store always reports a single entry, so the clear-on-second-entry helper never runs.
-[*]If another mod has already pushed the store out of order, it moves the entries it can identify into place, leaves the rest alone, and checks again on every launch. It never overwrites another mod's data.
-[*]Other mods do not need updates. It works with the mods already on the Workshop. Mod authors do not have to change anything.
+[*]Every mod's settings live inside the one entry the game reads correctly. A mod that asks for its own key gets its own data back, because the mod answers the read from that one entry instead of letting the game pick the first one.
+[*]Options panels that share the usual settings entry, one section per mod, work exactly as before. The mod hands them their sections and merges their saves back without touching anyone else's section.
+[*]The store always reports a single entry, so the clear-on-second-entry helper never fires.
+[*]Writes are gathered and saved once per task, so a mod that saves many values at once costs one write.
+[*]On every launch it checks the store. If another mod has already pushed the store out of order, it moves the entries it can identify into place, leaves the rest alone, and tries again next time. It never overwrites another mod's data.
 [/list]
-[h2]Works with every mod[/h2]
-Install this mod and the settings of every mod you have are kept, as those mods are today. Mod authors do not need to do anything. As an extra option, a mod author can ship the same file inside their own mod, so their players are covered even without this mod. A mod that ships the file and this mod can be installed together. Only one copy runs, the newest one.
+It works in the main menu and in a game. Other mods do not need updates. It works with the mods already on the Workshop, and mod authors do not have to change anything.
+[h2]What you will see[/h2]
+Nothing, most of the time. The options you set in other mods are simply still there after a restart. The mod shows a row under Options, Add-ons only in two cases:
+[list]
+[*][b]Rebuild storage[/b]: the store held entries the mod could not identify, so it is keeping settings in a fallback layout. Press the row, confirm, and the store is one entry again with every mod's settings kept. The row goes away once the store is normal. If that row is showing, press it before you disable the mod, or the helper in other mods will clear the store on its next save.
+[*][b]Storage limit reached[/b]: a mod tried to store more than the store can safely hold. That one write was refused and the mod's earlier settings were kept. The row's dialog names the mod and the sizes, and OK clears the notice. Nothing else is affected.
+[/list]
+[h2]Load and limits[/h2]
+Everything lives in one row. With 28 mods installed it is about 0.5 MB, nearly all of it one mod's game history, and a write costs about 8 ms. The number of mods does not matter on its own; what they store does.
+To find the ceiling, the row was grown 1 MB at a time in a game with the same 28 mods. The storage took everything: 16 MB in one write, growth to 20 MB, 2000 keys written at once. Nothing was lost at any size. The game process itself stopped, without a crash report, at 14 MB under repeated re-reads and at 21 MB under plain growth, at about 1.9 GB of memory. So the mod caps the row at 4 MB, a quarter of the lowest size at which the game stopped and eight times the real store. A write past the cap is refused the way a browser refuses a full localStorage, with the same error, so mods written against the web API already know what it means.
+[h2]How it was tested[/h2]
+On 1.5.0 with 28 mods, including the common options helpers, mods that use their own entry, a settings manager, and a mod that reads its settings the moment its script loads. Every option that had never persisted was changed on the real Options screen, from the main menu and from inside a game, and read back after a restart on the Options screen and in the mods' own code. Behaviour was checked too, not just the displayed values: a lens setting changed which lens the game opened when a scout was selected, a yield banner restyle changed the computed styles, a canal rules setting changed the rule in play. The full record, run by run, is on GitHub.
 [h2]Things to know[/h2]
 [list]
 [*]Settings you save from now on stay. Settings that were lost before you installed the mod are gone, unless they are still on disk under an entry the mod can identify.
-[*]Nothing appears on screen, with one exception. If the mod has had to work around entries it could not identify, Options, Add-ons shows a Rebuild storage row. Press it, confirm, and the store is one entry again. The row goes away once the store is normal.
-[*]If that row is showing, press it before you disable the mod. Otherwise the helper in other mods will clear the store on its next save.
-[*]Tested on 1.5.0 with 28 mods, including the common options helpers, mods that use their own entry, and a settings manager. The full test record is on GitHub.
-[*]The store has a size limit of 4 MB, eight times what 28 mods store. A mod that tries to go past it has that one write refused and keeps its earlier settings, and Options, Add-ons shows a Storage limit reached row that names the mod. Nothing else is affected.
+[*]The game does not guarantee the order mod scripts run in. A mod that reads its settings at the moment its script loads, before this mod has run, sees the old behaviour for that one launch. In every test launch so far this mod ran first.
+[*]The mod's own text, and its README, are in all eleven languages the game supports.
+[*]Removing the mod needs nothing in the normal case. The store is one row, so the game reads it as before and other mods find their sections. If the Rebuild storage row is showing, press it first.
 [/list]
-[h2]Load and limits[/h2]
-Everything lives in one row. With 28 mods it is about 0.5 MB, nearly all of it one mod's game history, and a write costs about 8 ms. To find the ceiling, the row was grown 1 MB at a time in a game with the same mods: 16 MB in one write and growth to 20 MB went through with nothing lost. The game process itself stopped at 14 MB under repeated re-reads and at 21 MB under plain growth, at 1.9 GB of memory, which is where the 4 MB limit comes from. The number of mods does not matter on its own; what they store does.
 [h2]For modders[/h2]
-Nothing is required of you. Your mod's settings work with this mod installed, whatever storage pattern your mod uses. If you want your players covered without them installing this mod, you can ship this fix inside your own mod, so your players get it without installing anything else. Copy ui/settings-keeper.js from this mod's folder without changing it, list it as the first UIScript of both your shell and game action groups, and keep your settings code as it is. The file embed/README.md in the same folder has the rules and the storage layout. Several mods can carry the file at once. The first copy to load installs, later copies find it and do nothing, and a newer build replaces an older one.
+Nothing is required of you. Your mod's settings work with this mod installed, whatever storage pattern your mod uses. If you want your players covered without them installing this mod, you can ship this fix inside your own mod. Copy ui/settings-keeper.js from this mod's folder without changing it, list it as the first UIScript of both your shell and game action groups, and keep your settings code as it is. The file embed/README.md in the same folder has the rules and the storage layout. Several mods can carry the file at once. The first copy to load installs, later copies find it and do nothing, and a newer build replaces an older one.
 [h2]Source and documentation[/h2]
 [list]
 [*][url=https://github.com/tmtmiller1/civilizationvii_tower-settings-keeper]Source, design notes and the test record on GitHub[/url], and the [url=https://github.com/tmtmiller1/civilizationvii_tower-settings-keeper/releases]releases[/url], with the zip for a manual install and the kit for modders.

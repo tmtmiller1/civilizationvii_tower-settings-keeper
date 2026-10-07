@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Workshop / identity emblem for Tower Settings Keeper. Same family look as the other Tower mods: dark ground,
+     gold frame, parchment art, serif wordmark. Motif: an options panel with three rows (a ticked box, a switch that
+     is on, a dropdown) and a closed padlock at its corner, for settings that stay the way they were set. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#243042"/>
+      <stop offset="100%" stop-color="#121821"/>
+    </linearGradient>
+    <linearGradient id="parchment" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f7eed1"/>
+      <stop offset="100%" stop-color="#e7d4a3"/>
+    </linearGradient>
+    <linearGradient id="goldv" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d9b55e"/>
+      <stop offset="100%" stop-color="#b8903f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e7d4a3" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#e7d4a3" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <rect x="26" y="26" width="972" height="972" rx="30" fill="none" stroke="#c9a24c" stroke-width="4" opacity="0.5"/>
+  <circle cx="512" cy="400" r="360" fill="url(#glow)"/>
+
+  <!-- The options panel -->
+  <rect x="242" y="112" width="540" height="500" rx="36" fill="url(#parchment)" stroke="#c9a24c" stroke-width="14"/>
+
+  <!-- Row 1: a ticked box -->
+  <rect x="306" y="176" width="74" height="74" rx="12" fill="#f7eed1" stroke="#b8903f" stroke-width="10"/>
+  <path d="M322,214 L340,234 L366,190" fill="none" stroke="#8a6d2b" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="430" y1="213" x2="700" y2="213" stroke="#c9a24c" stroke-width="28" stroke-linecap="round"/>
+
+  <!-- Row 2: a switch that is on -->
+  <rect x="298" y="326" width="100" height="56" rx="28" fill="url(#goldv)" stroke="#8a6d2b" stroke-width="6"/>
+  <circle cx="368" cy="354" r="21" fill="#f7eed1" stroke="#8a6d2b" stroke-width="4"/>
+  <line x1="430" y1="354" x2="660" y2="354" stroke="#c9a24c" stroke-width="28" stroke-linecap="round"/>
+
+  <!-- Row 3: a dropdown -->
+  <rect x="300" y="462" width="130" height="68" rx="10" fill="#f7eed1" stroke="#b8903f" stroke-width="10"/>
+  <line x1="322" y1="496" x2="372" y2="496" stroke="#c9a24c" stroke-width="14" stroke-linecap="round"/>
+  <polygon points="392,484 418,484 405,506" fill="#8a6d2b"/>
+  <line x1="470" y1="496" x2="620" y2="496" stroke="#c9a24c" stroke-width="28" stroke-linecap="round"/>
+
+  <!-- The padlock, closed, over the panel's corner -->
+  <path d="M676,548 V490 a60,60 0 0 1 120,0 V548" fill="none" stroke="#8a6d2b" stroke-width="40" stroke-linecap="round"/>
+  <path d="M676,548 V490 a60,60 0 0 1 120,0 V548" fill="none" stroke="url(#goldv)" stroke-width="26" stroke-linecap="round"/>
+  <rect x="636" y="540" width="200" height="150" rx="24" fill="url(#goldv)" stroke="#8a6d2b" stroke-width="8"/>
+  <circle cx="736" cy="598" r="20" fill="#243042"/>
+  <rect x="726" y="608" width="20" height="44" rx="6" fill="#243042"/>
+
+  <!-- Wordmark -->
+  <text x="512" y="812" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="96"
+        font-weight="bold" fill="#e7d4a3" letter-spacing="3">SETTINGS</text>
+  <text x="512" y="904" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="96"
+        font-weight="bold" fill="#e7d4a3" letter-spacing="3">KEEPER</text>
+  <text x="512" y="958" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="34"
+        fill="#c9a24c" opacity="0.92">Mod options that stay set</text>
+</svg>
