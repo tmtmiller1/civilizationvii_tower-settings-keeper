@@ -24,7 +24,8 @@ entry the game reads correctly, `modSettings`:
 
 ## Steps
 
-1. Copy `settings-keeper.js` into your mod, unchanged, for example as `ui/settings-keeper.js`.
+1. Copy `settings-keeper.js` into your mod, unchanged, for example as `ui/settings-keeper.js`. It is the file beside
+   this README in the kit, and `ui/settings-keeper.js` in a subscribed copy of the Tower Settings Keeper mod.
 2. List it as the **first** `<Item>` in `<UIScripts>` of **both** your shell and your game action groups:
 
    ```xml
