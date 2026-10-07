@@ -71,16 +71,22 @@ Content. Nothing to configure.
 - **One launch may miss.** The game does not promise the order mod scripts run in. A mod that reads its settings
   at the very moment it loads, before the keeper has run, sees the old behaviour for that launch; it reads normally
   as soon as it next looks. Watched on three launches the keeper ran first every time.
-- **Nothing shows on screen.** The keeper has no panel. The only trace is one line in `Logs/UI.log` beginning
-  `[settings-keeper] ready:` on every launch.
+- **Nothing shows on screen, with one exception.** The keeper has no panel; the only trace is one line in
+  `Logs/UI.log` beginning `[settings-keeper] ready:` on every launch. The exception: while the keeper is in its
+  fallback layout, Options, Add-ons shows a "Rebuild storage" row. Pressing it (after a confirm that says how many
+  entries go) drops the entries the keeper could not tell apart and writes everything it holds back as one entry.
+  The row disappears once the store is normal.
+
+  | The row, only while needed | The confirm |
+  |---|---|
+  | ![](docs/images/rebuild-row.png) | ![](docs/images/rebuild-dialog.png) |
 
 ## Removing it
 
 Normally nothing to do: the keeper keeps the real store at one row, so with it gone the game reads `modSettings`
-first as before, and the other mods find their slices (with a few extra fields they ignore). The one exception is a
-store with two or more entries the keeper could not name; the log line then says `BLOCKED` and the keeper cannot
-make it one row. Save any mod's options once, or run Demographics' Storage options, Repair storage, before disabling
-it in that case; otherwise the erase-on-second-entry helper in other mods would clear the store on its next save.
+first as before, and the other mods find their slices (with a few extra fields they ignore). If Options, Add-ons
+shows the "Rebuild storage" row, press it before disabling the keeper; otherwise the erase-on-second-entry helper in
+other mods would clear the store on its next save.
 
 ## For modders
 

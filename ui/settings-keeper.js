@@ -27,7 +27,8 @@ export const FALLBACK_ROOT_KEY = "\u0001";
 export const VIRTUAL_KEY = "__ls";
 export const MARK_KEY = "__settings-keeper";
 export const BLOCKED_KEY = "__blocked";
-export const VERSION = 1;
+export const VERSION = 1; // layout of the keeper's mark
+export const BUILD = 110; // this file's build; a newer copy replaces an older installed one
 const INTERNAL = [VIRTUAL_KEY, MARK_KEY, BLOCKED_KEY];
 const MAX_FOLD_STEPS = 32;
 const BLOCKED_COPY_LIMIT = 2 * 1024 * 1024;
@@ -452,10 +453,32 @@ class Keeper {
     }
   }
 
+  /**
+   * The player's way out of fallback mode: drop the rows that could not be named, keep everything the keeper holds
+   * (every slice and every key), and write it all back as the one normal row.
+   * @returns {{removedRows: number, keptSlices: number, keptKeys: number}}
+   */
+  rebuild() {
+    const root = this.readRoot() || {}; // includes a write still queued for this task
+    this.pending = null;
+    const removedRows = Math.max(0, this.engine.length() - 1);
+    this.engine.clear();
+    this.setCache(null, null);
+    this.blocked = false;
+    this.rootKey = ROOT_KEY;
+    const kept = Object.assign({}, root);
+    delete kept[MARK_KEY];
+    this.flushRoot(kept);
+    const keptSlices = Object.keys(withoutInternals(kept)).length;
+    const keptKeys = isPlainObject(kept[VIRTUAL_KEY]) ? Object.keys(kept[VIRTUAL_KEY]).length : 0;
+    this.log("warn", "rebuilt: " + removedRows + " unnamed row(s) dropped, " + keptSlices + " slices and " + keptKeys + " keys kept");
+    return { removedRows, keptSlices, keptKeys };
+  }
+
   /** Empties the real store and rewrites the root with the other mods' keys kept; also leaves blocked mode. */
   clear() {
+    const root = this.readRoot(); // includes a write still queued for this task
     this.pending = null;
-    const root = this.readRoot();
     const virt = root && isPlainObject(root[VIRTUAL_KEY]) ? root[VIRTUAL_KEY] : {};
     this.engine.clear();
     this.setCache(null, null);
@@ -505,8 +528,8 @@ class Keeper {
       Object.defineProperty(ls, "length", { get: () => this.length(), configurable: true, enumerable: false });
     }
     const api = {
-      status: () => this.status(), uninstall: () => this.uninstall(), engine: this.engine, rootKey: () => this.rootKey,
-      flush: () => this.flush()
+      build: BUILD, status: () => this.status(), uninstall: () => this.uninstall(), engine: this.engine,
+      rootKey: () => this.rootKey, flush: () => this.flush(), rebuild: () => this.rebuild()
     };
     def("__settingsKeeper", api);
     this.sync = false;
@@ -515,6 +538,7 @@ class Keeper {
 
   uninstall() {
     this.flush();
+    this.sync = true;
     for (const n of ["getItem", "setItem", "removeItem", "clear", "key", "length", "__settingsKeeper"]) delete this.ls[n];
   }
 }
@@ -527,7 +551,13 @@ class Keeper {
  */
 export function install(ls, opts = {}) {
   if (!ls) return null;
-  if (ls.__settingsKeeper) return ls.__settingsKeeper;
+  const current = ls.__settingsKeeper;
+  if (current) {
+    // several mods may carry this file; the newest build wins, an older one hands over after landing its writes
+    if (!(typeof current.build === "number" && current.build < BUILD)) return current;
+    if (typeof current.flush === "function") current.flush();
+    if (typeof current.uninstall === "function") current.uninstall();
+  }
   const keeper = new Keeper(ls, opts);
   keeper.locate();
   return keeper.patch();

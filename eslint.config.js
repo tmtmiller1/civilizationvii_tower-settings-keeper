@@ -5,7 +5,7 @@ export default [
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
-      globals: { window: "readonly", console: "readonly", localStorage: "readonly", globalThis: "readonly", Storage: "readonly" }
+      globals: { window: "readonly", console: "readonly", localStorage: "readonly", globalThis: "readonly", Storage: "readonly", Locale: "readonly", document: "readonly" }
     },
     rules: {
       complexity: ["error", 10],

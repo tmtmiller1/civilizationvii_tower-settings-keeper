@@ -13,7 +13,7 @@
         <Authors>Tower</Authors>
         <Package>TowerSettingsKeeper</Package>
         <PackageSortIndex>1</PackageSortIndex>
-        <Version>1.0.3</Version>
+        <Version>1.1.0</Version>
         <AffectsSavedGames>0</AffectsSavedGames>
     </Properties>
     <Dependencies>
@@ -31,14 +31,19 @@
                 </UpdateText>
                 <UIScripts>
                     <Item>ui/settings-keeper.js</Item>
+                    <Item>ui/sk-options.js</Item>
                 </UIScripts>
             </Actions>
         </ActionGroup>
         <ActionGroup id="settings-keeper-game" scope="game" criteria="always">
             <Properties><LoadOrder>1</LoadOrder></Properties>
             <Actions>
+                <UpdateText>
+                    <Item>text/en_us/TowerSettingsKeeperText.xml</Item>
+                </UpdateText>
                 <UIScripts>
                     <Item>ui/settings-keeper.js</Item>
+                    <Item>ui/sk-options.js</Item>
                 </UIScripts>
             </Actions>
         </ActionGroup>

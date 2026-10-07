@@ -1,7 +1,7 @@
 // sk-core.test.mjs - the keeper on a store that behaves like the game's.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { install, ROOT_KEY, FALLBACK_ROOT_KEY, VIRTUAL_KEY, MARK_KEY, BLOCKED_KEY, looksLikeRoot, KNOWN_KEYS } from "../ui/settings-keeper.js";
+import { install, ROOT_KEY, FALLBACK_ROOT_KEY, VIRTUAL_KEY, MARK_KEY, BLOCKED_KEY, BUILD, looksLikeRoot, KNOWN_KEYS } from "../ui/settings-keeper.js";
 import { fakeStore } from "./fake-engine-storage.mjs";
 
 const settle = () => new Promise((r) => setTimeout(r, 0)); // queued engine writes land at the end of the task
@@ -463,4 +463,33 @@ test("clear() and uninstall() flush first", async () => {
   await settle();
   assert.equal(ls2.getItem("k2"), "v2", "kept through clear()");
   assert.deepEqual(Object.keys(ls2.rows()), ["modSettings"]);
+});
+
+test("rebuild() leaves fallback mode: unnamed rows dropped, every slice and key kept, one row", async () => {
+  const ls = fakeStore({ "CM_S1_P0_BACKUP_META": "{}", "ba_x": "{}", modSettings: HOF });
+  const api = install(ls, opts());
+  assert.equal(api.status().blocked, true);
+  helperSave(ls, "bz-map-trix", "o", 3);
+  ls.setItem("own", "v");
+  const r = api.rebuild();
+  assert.deepEqual(r, { removedRows: 3, keptSlices: 1, keptKeys: 1 });
+  assert.equal(api.status().blocked, false);
+  assert.equal(api.status().rootKey, ROOT_KEY);
+  assert.deepEqual(Object.keys(ls.rows()), ["modSettings"]);
+  assert.equal(helperLoad(ls, "bz-map-trix", "o"), 3);
+  assert.equal(ls.getItem("own"), "v");
+  const ls2 = fakeStore(ls.rows());
+  assert.equal(install(ls2, opts()).status().blocked, false);
+});
+
+test("a newer build replaces an older installed keeper; an equal or newer one is kept", async () => {
+  const ls = fakeStore({ modSettings: HOF });
+  const old = install(ls, opts());
+  old.build = BUILD - 1; // pretend an older copy installed first
+  ls.setItem("own", "v");
+  const fresh = install(ls, opts());
+  assert.notEqual(fresh, old, "replaced");
+  assert.equal(ls.__settingsKeeper, fresh);
+  assert.equal(ls.getItem("own"), "v", "the older copy's queued write landed first");
+  assert.equal(install(ls, opts()), fresh, "same build: kept");
 });

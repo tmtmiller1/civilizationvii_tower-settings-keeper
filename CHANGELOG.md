@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.0 (2026-10-07)
+
+- A "Rebuild storage" row in Options, Add-ons, shown only while the keeper is in its fallback layout (two or more
+  stored entries it could not tell apart ahead of the shared settings). A confirm dialog says how many entries go;
+  rebuilding drops them and writes everything the keeper holds back as the one normal row. Nothing shows otherwise.
+- Several mods may ship this file; the newest build on the machine is the one that runs.
+
 ## 1.0.3 (2026-10-06)
 
 - Writes made in the same moment are combined into one engine write (reads in between see them at once), so a mod

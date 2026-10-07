@@ -73,6 +73,14 @@ Reads only work when the root IS row 1. On install the keeper looks at row 1 and
 5. Otherwise (two or more rows that cannot be named) fallback mode: write the root under `"\u0001"`, which sorts
    before everything the engine stores, with the same salvage; the unnamed rows stay on disk untouched.
 
+The player's way out of fallback mode is the "Rebuild storage" row (`ui/sk-options.js`, a second shell and game
+script that may import the Options model because it only needs to run once the Options screen opens). It is
+registered hidden and shown only while `status().blocked`; a confirm dialog states the number of rows that go;
+`rebuild()` drops them and writes every slice and key the keeper holds back as the one normal row.
+
+Several mods may carry `settings-keeper.js`. `install()` keeps the first copy unless a later one has a higher
+`BUILD`, in which case the older copy lands its queued write, uninstalls, and the newer one installs.
+
 Once the root is row 1, `tidy()` removes raw rows hiding behind it for keys the root already holds (older copies
 nobody can read), so the real store is one row and the erase-on-second-entry helpers stay quiet even after the keeper
 is removed. Only unknown keys hiding behind the root, or a fallback store, keep the row count above one; the log says
@@ -133,7 +141,7 @@ Known limits, by design:
 - Every write serialises the whole row (several hundred KB with Demographics' history in it): about 8 ms per task
   that writes, whatever the number of writes in it (1.0.3). A mod that saves every turn adds that much per turn.
 - With the keeper removed in fallback mode, the erase-on-second-entry helpers would clear the store on their next
-  save; the README says to repair first.
+  save; the Rebuild storage row is the way out, and the README says to press it first.
 
 ## Verification
 
@@ -192,6 +200,12 @@ run left, each a fresh process. Watched:
 | Cultural Diffusion live `CONFIG` after its `applyTunableOverrides()` | `claimOnlyUnowned false, recedeBorders false` | `true, true` |
 | Canals start line and GameConfiguration pin | `rules: by age`, `{"mode":"ages"}` | `rules: one-tile canals`, `{"mode":"one-tile"}` |
 | sib Celebratory Celebrations | `masterEnable=undefined`, `showFireworks=undefined` read into its CONFIG | `0`, `0` read into its CONFIG; the effect needs a celebration and was not triggered |
+
+1.1.0 (runs `R1`, `R1b`, `R1g2`, `R2`): on a store with two unnameable entries plus AutoMissionary's, the keeper went to
+fallback layout (4 rows), the Rebuild storage row showed in Options, Add-ons from the main menu and from a game, the
+game's own OK/Cancel dialog opened with the count ("3 stored entries..."), OK rebuilt the store (3 rows dropped, slices
+and keys kept, one row), the row hid, and the next launch was in the normal layout with the row hidden. Text is loaded
+in both scopes (first in-game run showed raw LOC keys; fixed before release).
 
 1.0.1 (runs `V2-poison`, `V2-clean`, `O-regress`): the 2026-10-06 store ends in the normal layout, one real row, with
 AutoMissionary's values read through the keeper and the clobbered row's slice salvaged; the clean store is unchanged;
