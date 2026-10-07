@@ -9,5 +9,10 @@
         <Replace Tag="LOC_TSK_REBUILD_DESCRIPTION" Language="ru_RU"><Text>Некоторые сохранённые записи стоят перед общими настройками, и мод не может определить, какой мод их записал, поэтому он хранит настройки в резервной раскладке. Перестройка удаляет эти записи и записывает всё, что хранит мод, одной записью. Все настройки и ключи модов, которые хранит мод, сохраняются.</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_TITLE" Language="ru_RU"><Text>Перестроить хранилище?</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_BODY" Language="ru_RU"><Text>Будет удалено сохранённых записей, которые мод не смог опознать: {1_Count}. Все хранимые настройки и ключи модов сохраняются. Это действие нельзя отменить.</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_LABEL" Language="ru_RU"><Text>Достигнут предел хранилища</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_CAPTION" Language="ru_RU"><Text>Подробности</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_DESCRIPTION" Language="ru_RU"><Text>Какой-то мод попытался сохранить больше настроек, чем хранилище может безопасно вместить. Эта запись была отклонена, а прежние настройки мода сохранены. Остальные моды не затронуты. Нажмите, чтобы увидеть имя мода и размеры.</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_TITLE" Language="ru_RU"><Text>Достигнут предел хранилища</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_BODY" Language="ru_RU"><Text>{1_Mod} попытался сохранить настройки, из-за которых хранилище выросло бы до {2_Size} МБ. Предел составляет {3_Limit} МБ, поэтому запись была отклонена, а прежние настройки сохранены. Остальные моды не затронуты. Сообщите об этом автору того мода. «ОК» убирает это уведомление.</Text></Replace>
     </LocalizedText>
 </Database>

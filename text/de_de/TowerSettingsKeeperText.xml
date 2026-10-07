@@ -9,5 +9,10 @@
         <Replace Tag="LOC_TSK_REBUILD_DESCRIPTION" Language="de_DE"><Text>Einige gespeicherte Einträge liegen vor den gemeinsamen Einstellungen, und die Mod kann nicht erkennen, welche Mod sie geschrieben hat. Deshalb hält sie die Einstellungen in einer Ersatzanordnung. Beim Neuaufbau werden diese Einträge gelöscht und alles, was die Mod hält, als ein einziger Eintrag zurückgeschrieben. Alle Mod-Einstellungen und Schlüssel, die die Mod hält, bleiben erhalten.</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_TITLE" Language="de_DE"><Text>Speicher neu aufbauen?</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_BODY" Language="de_DE"><Text>{1_Count} gespeicherte Einträge, die die Mod nicht zuordnen konnte, werden gelöscht. Alle Mod-Einstellungen und Schlüssel, die sie hält, bleiben erhalten. Dies kann nicht rückgängig gemacht werden.</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_LABEL" Language="de_DE"><Text>Speicherlimit erreicht</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_CAPTION" Language="de_DE"><Text>Details</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_DESCRIPTION" Language="de_DE"><Text>Eine Mod wollte mehr Einstellungen speichern, als der Speicher sicher aufnehmen kann. Dieser Schreibvorgang wurde abgelehnt, und die früheren Einstellungen der Mod bleiben erhalten. Alle anderen Mods sind nicht betroffen. Drücken, um den Namen der Mod und die Größen zu sehen.</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_TITLE" Language="de_DE"><Text>Speicherlimit erreicht</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_BODY" Language="de_DE"><Text>{1_Mod} wollte Einstellungen speichern, mit denen der Speicher {2_Size} MB groß würde. Das Limit liegt bei {3_Limit} MB. Der Schreibvorgang wurde deshalb abgelehnt, und die früheren Einstellungen bleiben erhalten. Alle anderen Mods sind nicht betroffen. Bitte melden Sie dies dem Autor dieser Mod. OK entfernt diesen Hinweis.</Text></Replace>
     </LocalizedText>
 </Database>

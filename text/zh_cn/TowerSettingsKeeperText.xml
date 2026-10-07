@@ -9,5 +9,10 @@
         <Replace Tag="LOC_TSK_REBUILD_DESCRIPTION" Language="zh_Hans_CN"><Text>有些已保存的记录排在共享设置之前，而本 Mod 无法判断它们是由哪个 Mod 写入的，因此目前以备用布局保存设置。重建会删除这些记录，并把本 Mod 保存的全部内容作为一条记录写回。本 Mod 保存的所有 Mod 设置和键都会保留。</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_TITLE" Language="zh_Hans_CN"><Text>重建存储？</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_BODY" Language="zh_Hans_CN"><Text>将删除 {1_Count} 条本 Mod 无法识别的已保存记录。本 Mod 保存的所有 Mod 设置和键都会保留。此操作无法撤销。</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_LABEL" Language="zh_Hans_CN"><Text>已达到存储上限</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_CAPTION" Language="zh_Hans_CN"><Text>详情</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_DESCRIPTION" Language="zh_Hans_CN"><Text>某个 Mod 试图保存的设置超过了存储空间可以安全容纳的量。该写入已被拒绝，该 Mod 之前的设置已保留。其他所有 Mod 不受影响。按下可查看 Mod 名称和大小。</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_TITLE" Language="zh_Hans_CN"><Text>已达到存储上限</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_BODY" Language="zh_Hans_CN"><Text>{1_Mod} 试图保存的设置会使存储空间达到 {2_Size} MB。上限为 {3_Limit} MB，因此该写入已被拒绝，之前的设置已保留。其他所有 Mod 不受影响。请将此情况报告给该 Mod 的作者。按“确定”清除此通知。</Text></Replace>
     </LocalizedText>
 </Database>

@@ -146,6 +146,7 @@ Known limits:
   test.
 - Every write serialises the whole row, several hundred KB with Demographics' history in it. That is about 8 ms per
   task that writes, whatever the number of writes in it (1.0.3). A mod that saves every turn adds that much per turn.
+  The row is capped at 4 MB (1.3.0); see Load and limits.
 - If the keeper is removed while in fallback mode, the clear-on-second-entry helpers clear the store on their next
   save. The Rebuild storage row is the way out, and the README says to press it first.
 
@@ -228,3 +229,93 @@ Embedded copy (runs `E-clean`, `E-poison`, `E-both`, 2026-10-07). The same file 
 and game UIScripts, with the standalone mod not installed. It was the first script line in both scopes, the clean
 store stayed in the normal layout, and the 2026-10-06 store was folded and collapsed to one row. With the standalone
 installed as well there was one keeper, the second copy found it and did nothing, and both copies logged `ready`.
+
+## Load and limits
+
+Everything the keeper holds is one row, so its size is the one quantity that can grow without bound. On the test
+machine, with 28 mods installed, the row is 530 KB: Demographics' Hall of Fame section is almost all of it, and the
+options panels add a few hundred bytes each. The number of mods does not matter on its own. What they store does.
+
+### The guard (1.3.0)
+
+A write that would take the row past `LIMIT_BYTES` (4 MB) is refused. The keeper keeps a running estimate of the
+row's size: exact after every read or flush, adjusted by the write's delta in between, so no write costs an extra
+serialisation. For an own key the delta is the new value's length against the old one's. For a `modSettings` write it
+is the new text against the cached public text. A refused write throws the `QuotaExceededError` browsers throw when
+localStorage is full, built with `DOMException` where the runtime has it. The earlier value stays. The keeper records
+`{ by, key, bytes, limit, at }` under `mark.refused` so the notice survives a restart, and logs one error line with
+the same facts. `by` is the own key, or for a `modSettings` write the section that grew the most (the largest one
+when none grew). The `ready` line reports the row size and any refusal.
+
+An own-key refusal clears when a write for that key fits. A `modSettings` refusal clears only from the Options row,
+because every mod writes that key and the next writer would clear another mod's notice. The row is "Storage limit
+reached" under Options, Add-ons, hidden unless `status().refused` is set. Pressing it opens the game's OK dialog with
+the mod, the size the write would have reached and the limit; OK calls `dismissRefusal()` and hides the row. The row
+and its text are in `sk-options.js` and the text files; an embedded copy refuses and logs but shows no row.
+
+`removeItem` lowers the estimate by the removed value, so a replace-by-remove-and-add of the same size fits. The
+keeper's own start-up writes (folding, the fallback copy, rebuild) are not guarded.
+
+### Where the engine gives up, 2026-10-06
+
+Probes in `devtools/compat`: `sko-volume.js`, `sko-volume-quiet.js`, `sko-volume-raw.js`, `sko-volume-raw2.js`,
+`sko-volume-start.js` (runs `VOL-grow`, `VOL-grow2`, `VOL-raw`, `VOL-raw2`, `VOL-start`, `VOL-quiet`). Play Now
+game with the player's 28 mods, the probe starting 15 s after the game loaded. Each run started from the real 530 KB
+store and the runner put the store back afterwards. Sizes are JSON characters of the `modSettings` row.
+
+| Run | What it did | Result |
+|---|---|---|
+| `VOL-grow` | 1 MB per step through the keeper; after each step a flush, a raw engine read of the row, a keeper read of a missing key (which re-parses the row), a read-back of chunk 1 and two `status()` calls | 13 steps clean; at the 14 MB step the process stopped after `setItem`, inside the flush. No crash report. |
+| `VOL-grow2` | the same with a log line after each sub-step | the same, at the same step |
+| `VOL-raw` | plain strings of 14.2, 14.7, 15.2, 16.0, 16.8 and 17.0 million characters: `JSON.stringify` of each, then a raw engine `setItem` of each | all pass; stringify about 60 ms, engine write 19 to 26 ms |
+| `VOL-raw2` A | raw engine writes growing 1 MB per step to 20 MB, no keeper | all pass, 5 to 56 ms |
+| `VOL-raw2` B | the keeper with one 15 MB value, one flush | pass, 102 ms, row 16.26 MB |
+| `VOL-raw2` C | the keeper with 15 one-MB keys written in one task, one flush | pass, 110 ms, row 16.26 MB, last chunk reads back |
+| `VOL-start` | a fresh launch on the 14 MB store `VOL-grow` left | main menu and game loaded, keeper `ready` with 13 keys and all 5 sections; the 13 chunks read back intact; the process then stopped during a raw parse of the row followed by a flush |
+| `VOL-quiet` | 1 MB per step through the keeper, one flush per step and nothing read back | 20 steps clean (15 to 197 ms per flush); the process stopped at the 21 MB step inside the flush, at 1.9 GB resident. No crash report. |
+
+Per-step timings from `VOL-grow` (flush is serialise plus engine write; the key read re-parses the row because the
+write invalidated the cache):
+
+| Row | Flush | Key read | Raw engine read |
+|---|---|---|---|
+| 1.6 MB | 19 ms | 5 ms | 4 ms |
+| 5.8 MB | 71 ms | 20 ms | 14 ms |
+| 11.0 MB | 101 ms | 64 ms | 32 ms |
+| 14.2 MB | 141 ms | 67 ms | 68 ms |
+
+What this says: the storage itself took every size tried, up to 20 MB in a raw write, and the keeper's reads and
+writes stayed correct at every size. The ceiling is the game process, which stops without a crash report somewhere
+between 14 MB (with repeated re-reads of the row) and 21 MB (without), with resident memory near 2 GB. The 4 MB
+limit is a quarter of the lower figure and eight times the real store. No mod in the corpus stores more than
+Demographics' history, and nothing but a history-keeping mod grows over a game.
+
+### Many small keys, 2026-10-06
+
+Run `BURST-1`, `sko-burst.js`, main menu, the real 530 KB store.
+
+| What | Result |
+|---|---|
+| 2000 `setItem` calls in one task | 10 ms for the loop, 11 ms for the one flush; row 568 KB; `many-1999` reads back |
+| 200 writes each in its own task, 200 flushes | 1148 ms, 5.7 ms per write |
+| 2000 `getItem` calls | all correct, 1888 ms, 0.9 ms per read |
+| remove all 2200 keys | row back to 530 KB, keys 0, one engine row throughout |
+
+A read costs an engine read of the whole row, because the keeper re-reads row 1 on every call to notice a raw write
+by a mod that ran before it. At 530 KB that is about a millisecond. A mod that reads a few values when its panel
+opens does not notice; a loop over thousands of keys does.
+
+### The guard in game, 2026-10-06
+
+Runs `LIMIT-1` to `LIMIT-3`, `sko-limit.js` on the real Options screen from the main menu, the real store.
+
+- `LIMIT-1` crashed 40 s after launch with the vanilla signature from the engine-closed notes (SIGSEGV on a worker
+  thread, `CivilizationVII+0x21091fc`, the same frames as the 2026-09-17 reports shifted by the 1.5.0 build). The
+  store showed the refusal mark had been written before the crash. Reran, as that signature requires.
+- `LIMIT-2`: `DOMException` is not defined in the game's runtime, so the quota error is a plain `Error` named
+  `QuotaExceededError` with `code` 22. A 5 MB `setItem` threw it with the message naming the key and the sizes, the
+  earlier value `"small"` read back, and `status().refused` held `{ by: "limit-test", bytes: 5773039, limit:
+  4194304 }`. Options, Add-ons showed "Storage limit reached" with a Details button under the mod's group. Pressing
+  it opened the game's dialog with the title, the body naming `limit-test`, 5.5 MB and 4.0 MB, and one OK. OK
+  cleared the notice (`refused: null`), the row hid, and the value was still `"small"`.
+- `LIMIT-3`: the same again for the pictures in `docs/images`.

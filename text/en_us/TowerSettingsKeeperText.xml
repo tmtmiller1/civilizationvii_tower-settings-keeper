@@ -26,5 +26,20 @@
         <Row Tag="LOC_TSK_REBUILD_CONFIRM_BODY">
             <Text>{1_Count} stored entries that the mod could not identify will be deleted. All mod settings and keys it holds are kept. This cannot be undone.</Text>
         </Row>
+        <Row Tag="LOC_TSK_LIMIT_LABEL">
+            <Text>Storage limit reached</Text>
+        </Row>
+        <Row Tag="LOC_TSK_LIMIT_CAPTION">
+            <Text>Details</Text>
+        </Row>
+        <Row Tag="LOC_TSK_LIMIT_DESCRIPTION">
+            <Text>A mod tried to store more settings than the store can safely hold. That write was refused and the mod's earlier settings were kept. Every other mod is unaffected. Press for the mod's name and the sizes.</Text>
+        </Row>
+        <Row Tag="LOC_TSK_LIMIT_TITLE">
+            <Text>Storage limit reached</Text>
+        </Row>
+        <Row Tag="LOC_TSK_LIMIT_BODY">
+            <Text>{1_Mod} tried to store settings that would bring the store to {2_Size} MB. The limit is {3_Limit} MB, so that write was refused and the earlier settings were kept. Every other mod is unaffected. Please report this to that mod's author. OK clears this notice.</Text>
+        </Row>
     </EnglishText>
 </Database>

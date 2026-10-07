@@ -493,3 +493,76 @@ test("a newer build replaces an older installed keeper; an equal or newer one is
   assert.equal(ls.getItem("own"), "v", "the older copy's queued write landed first");
   assert.equal(install(ls, opts()), fresh, "same build: kept");
 });
+
+// ---- the size limit ----------------------------------------------------------------------------------------------
+
+test("a write that would take the row past the limit is refused with QuotaExceededError and the old value kept", async () => {
+  const ls = fakeStore({ modSettings: HOF });
+  const api = install(ls, { ...opts(), limitBytes: 2000 });
+  ls.setItem("backup", "small");
+  await settle();
+  assert.equal(api.status().rowBytes, ls.rows().modSettings.length, "exact after a flush");
+  assert.throws(() => ls.setItem("backup", "x".repeat(3000)), (e) => e.name === "QuotaExceededError" && /"backup"/.test(e.message));
+  assert.equal(ls.getItem("backup"), "small", "the earlier value is kept");
+  await settle();
+  const s = api.status();
+  assert.equal(s.refused.by, "backup");
+  assert.equal(s.refused.key, "backup");
+  assert.equal(s.refused.limit, 2000);
+  assert.ok(s.refused.bytes > 2000);
+  assert.equal(Object.keys(ls.rows()).length, 1, "still one row");
+  assert.ok(logs.some((l) => /write of "backup" by "backup" refused/.test(l)));
+  ls.setItem("backup", "fits");
+  await settle();
+  assert.equal(api.status().refused, null, "a write for the same key that fits ends the notice");
+  assert.equal(ls.getItem("backup"), "fits");
+});
+
+test("a modSettings write past the limit names the section that grew; other sections are untouched", async () => {
+  const ls = fakeStore({ modSettings: HOF });
+  const api = install(ls, { ...opts(), limitBytes: 2000 });
+  helperSave(ls, "tiny-mod", "on", true);
+  await settle();
+  assert.throws(() => helperSave(ls, "greedy-mod", "blob", "x".repeat(2500)), (e) => e.name === "QuotaExceededError");
+  await settle();
+  assert.equal(api.status().refused.by, "greedy-mod");
+  assert.equal(api.status().refused.key, "modSettings");
+  assert.equal(helperLoad(ls, "tiny-mod", "on"), true);
+  assert.equal(helperLoad(ls, "greedy-mod", "blob"), undefined);
+  assert.deepEqual(JSON.parse(ls.rows().modSettings).demographics, { x: 1 });
+  helperSave(ls, "tiny-mod", "on", false);
+  await settle();
+  assert.equal(api.status().refused.by, "greedy-mod", "another mod's write does not clear the notice");
+  api.dismissRefusal();
+  await settle();
+  assert.equal(api.status().refused, null);
+  assert.equal(JSON.parse(ls.rows().modSettings)[MARK_KEY].refused, undefined);
+});
+
+test("the refusal notice survives a restart and the default limit is 4 MB", async () => {
+  const ls = fakeStore({ modSettings: HOF });
+  install(ls, { ...opts(), limitBytes: 2000 });
+  assert.throws(() => ls.setItem("big", "x".repeat(2500)));
+  await settle();
+  const ls2 = fakeStore(ls.rows());
+  const api2 = install(ls2, opts());
+  assert.equal(api2.status().refused.by, "big");
+  assert.equal(api2.status().limitBytes, 4 * 1024 * 1024);
+  assert.equal(api2.limitBytes, 4 * 1024 * 1024);
+  ls2.setItem("big", "x".repeat(2500), "fits under the real limit");
+  await settle();
+  assert.equal(api2.status().refused, null);
+  assert.equal(ls2.getItem("big").length, 2500);
+});
+
+test("removing a key lowers the size estimate so a replacement of the same size fits", async () => {
+  const ls = fakeStore({ modSettings: HOF });
+  install(ls, { ...opts(), limitBytes: 3000 });
+  ls.setItem("a", "x".repeat(1500));
+  assert.throws(() => ls.setItem("b", "x".repeat(1500)));
+  ls.removeItem("a");
+  ls.setItem("b", "x".repeat(1500));
+  await settle();
+  assert.equal(ls.getItem("b").length, 1500);
+  assert.equal(ls.getItem("a"), null);
+});

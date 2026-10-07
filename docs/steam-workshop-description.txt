@@ -1,5 +1,5 @@
 [h1]Tower Settings Keeper[/h1]
-[b]Version 1.2.0. For Civilization VII 1.5.0. In all eleven languages the game supports.[/b]
+[b]Version 1.3.0. For Civilization VII 1.5.0. In all eleven languages the game supports.[/b]
 With this mod installed, the options you set in other mods stay set after you restart the game. It has no options of its own, does not change gameplay, and needs no setup.
 [h2]The problem[/h2]
 Mods keep their settings in the game's saved-settings store. That store has a bug: a read returns the first entry in it, no matter which entry was asked for, and there is no way to list the entries. A mod can read its own settings only if its entry happens to sort first. Every other mod gets a different mod's data, treats it as its own, and writes it back under its own name the next time it saves. Players see options panels that reset between launches, and sometimes one mod's settings showing up inside another. About fifty Workshop mods also include a helper that clears the whole store as soon as it sees a second entry, so one mod that stores its settings under its own entry wipes every other mod's settings on the next save.
@@ -19,7 +19,10 @@ Install this mod and the settings of every mod you have are kept, as those mods 
 [*]Nothing appears on screen, with one exception. If the mod has had to work around entries it could not identify, Options, Add-ons shows a Rebuild storage row. Press it, confirm, and the store is one entry again. The row goes away once the store is normal.
 [*]If that row is showing, press it before you disable the mod. Otherwise the helper in other mods will clear the store on its next save.
 [*]Tested on 1.5.0 with 28 mods, including the common options helpers, mods that use their own entry, and a settings manager. The full test record is on GitHub.
+[*]The store has a size limit of 4 MB, eight times what 28 mods store. A mod that tries to go past it has that one write refused and keeps its earlier settings, and Options, Add-ons shows a Storage limit reached row that names the mod. Nothing else is affected.
 [/list]
+[h2]Load and limits[/h2]
+Everything lives in one row. With 28 mods it is about 0.5 MB, nearly all of it one mod's game history, and a write costs about 8 ms. To find the ceiling, the row was grown 1 MB at a time in a game with the same mods: 16 MB in one write and growth to 20 MB went through with nothing lost. The game process itself stopped at 14 MB under repeated re-reads and at 21 MB under plain growth, at 1.9 GB of memory, which is where the 4 MB limit comes from. The number of mods does not matter on its own; what they store does.
 [h2]For modders[/h2]
 Nothing is required of you. Your mod's settings work with this mod installed, whatever storage pattern your mod uses. If you want your players covered without them installing this mod, you can ship this fix inside your own mod, so your players get it without installing anything else. Copy ui/settings-keeper.js from this mod's folder without changing it, list it as the first UIScript of both your shell and game action groups, and keep your settings code as it is. The file embed/README.md in the same folder has the rules and the storage layout. Several mods can carry the file at once. The first copy to load installs, later copies find it and do nothing, and a newer build replaces an older one.
 [h2]Source and documentation[/h2]

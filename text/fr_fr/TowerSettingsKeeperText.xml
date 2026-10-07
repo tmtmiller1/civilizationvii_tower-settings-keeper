@@ -9,5 +9,10 @@
         <Replace Tag="LOC_TSK_REBUILD_DESCRIPTION" Language="fr_FR"><Text>Certaines entrées enregistrées se classent avant les réglages partagés et le mod ne peut pas déterminer quel mod les a écrites. Il conserve donc les réglages dans une disposition de secours. La reconstruction supprime ces entrées et réécrit tout ce que le mod détient en une seule entrée. Tous les réglages et toutes les clés de mods que le mod détient sont conservés.</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_TITLE" Language="fr_FR"><Text>Reconstruire le stockage ?</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_BODY" Language="fr_FR"><Text>{1_Count} entrées enregistrées que le mod n'a pas pu identifier seront supprimées. Tous les réglages et toutes les clés de mods qu'il détient sont conservés. Cette action est irréversible.</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_LABEL" Language="fr_FR"><Text>Limite de stockage atteinte</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_CAPTION" Language="fr_FR"><Text>Détails</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_DESCRIPTION" Language="fr_FR"><Text>Un mod a tenté d'enregistrer plus de réglages que le stockage ne peut en contenir sans risque. Cette écriture a été refusée et les réglages précédents du mod ont été conservés. Les autres mods ne sont pas concernés. Appuyez pour voir le nom du mod et les tailles.</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_TITLE" Language="fr_FR"><Text>Limite de stockage atteinte</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_BODY" Language="fr_FR"><Text>{1_Mod} a tenté d'enregistrer des réglages qui auraient porté le stockage à {2_Size} Mo. La limite est de {3_Limit} Mo, cette écriture a donc été refusée et les réglages précédents ont été conservés. Les autres mods ne sont pas concernés. Merci de le signaler à l'auteur de ce mod. OK efface cet avis.</Text></Replace>
     </LocalizedText>
 </Database>

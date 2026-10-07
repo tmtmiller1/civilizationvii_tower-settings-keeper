@@ -12,6 +12,9 @@
 //   - length reports 1, so the "clear() when length > 1" guard many mods carry never runs. key(i) stays null as the
 //     engine has it, so a loop that lists keys in order to remove them stays the no-op it has always been.
 //   - clear() empties the store and writes the root back with the other mods' keys kept.
+//   - A write that would take the row past LIMIT_BYTES is refused with the QuotaExceededError browsers throw, the
+//     earlier value is kept, and the mod responsible is named in the log and in the keeper's mark. The game process
+//     stopped in testing once the row passed about 14 MB; the limit sits well below that.
 // At start-up the keeper makes sure its root is row 1. Rows that sort before it and can be identified by content (see
 // KNOWN_KEYS below) are removed and folded into the root. Their bytes move; nothing is lost. A row it cannot identify
 // is never touched. If that row is the only one left, the store is rebuilt around it. Otherwise the keeper writes its
@@ -29,7 +32,8 @@ export const VIRTUAL_KEY = "__ls";
 export const MARK_KEY = "__settings-keeper";
 export const BLOCKED_KEY = "__blocked";
 export const VERSION = 1; // layout of the keeper's mark
-export const BUILD = 111; // this file's build; a newer copy replaces an older installed one
+export const BUILD = 112; // this file's build; a newer copy replaces an older installed one
+export const LIMIT_BYTES = 4 * 1024 * 1024; // the whole row; see docs/design.md, Load and limits
 const INTERNAL = [VIRTUAL_KEY, MARK_KEY, BLOCKED_KEY];
 const MAX_FOLD_STEPS = 32;
 const BLOCKED_COPY_LIMIT = 2 * 1024 * 1024;
@@ -60,6 +64,29 @@ function safeMatch(entry, obj, text) {
     return typeof entry.match === "function" && entry.match(obj, text) === true;
   } catch (_) {
     return false;
+  }
+}
+
+/** The error browsers throw when localStorage is full. Mods written against the web API know it by name. */
+function quotaError(message) {
+  try {
+    const DE = typeof globalThis !== "undefined" ? globalThis.DOMException : undefined;
+    if (typeof DE === "function") return new DE(message, "QuotaExceededError");
+  } catch (_) {
+    /* no DOMException in this runtime */
+  }
+  const e = new Error(message);
+  e.name = "QuotaExceededError";
+  e.code = 22;
+  return e;
+}
+
+function jsonLength(v) {
+  if (v === undefined) return 0;
+  try {
+    return JSON.stringify(v).length;
+  } catch (_) {
+    return 0;
   }
 }
 
@@ -97,6 +124,8 @@ class Keeper {
     this.known = Array.isArray(opts.knownKeys) ? opts.knownKeys : [];
     this.now = typeof opts.now === "function" ? opts.now : () => Date.now();
     this.origin = typeof opts.origin === "string" ? opts.origin : "";
+    this.limit = typeof opts.limitBytes === "number" && opts.limitBytes > 0 ? opts.limitBytes : LIMIT_BYTES;
+    this.estBytes = 0; // the row's size: exact after every read or flush, adjusted per write in between
     this.engine = captureEngine(ls);
     this.rootKey = ROOT_KEY;
     this.cacheText = null;
@@ -141,7 +170,66 @@ class Keeper {
     this.cacheRoot = root;
     this.cachePublic = null;
     this.foreign = false;
+    this.estBytes = typeof text === "string" ? text.length : 0;
     return root;
+  }
+
+  // ---- the size limit ---------------------------------------------------------------------------------------------
+
+  /**
+   * Refuse a write that would take the row past the limit. Throws the quota error after noting who asked, so the
+   * Options row can name the mod. `culprit` is computed only when the write is refused.
+   */
+  guard(root, key, delta, culprit) {
+    const projected = this.estBytes + delta;
+    if (projected <= this.limit) return;
+    const by = culprit ? culprit() : key;
+    const mark = isPlainObject(root[MARK_KEY]) ? root[MARK_KEY] : (root[MARK_KEY] = {});
+    mark.refused = { by, key, bytes: projected, limit: this.limit, at: this.now() };
+    this.writeRoot(root);
+    const msg = "write of " + JSON.stringify(key) + " by " + JSON.stringify(by) + " refused: the store would be " +
+      projected + " bytes, over the " + this.limit + " byte limit; the earlier value is kept";
+    this.log("error", msg);
+    throw quotaError("[settings-keeper] " + msg);
+  }
+
+  /** A write for the refused own key that fits ends the notice. null clears any notice. */
+  clearRefusal(root, key) {
+    const mark = root[MARK_KEY];
+    if (!isPlainObject(mark) || !isPlainObject(mark.refused)) return;
+    if (key === null || mark.refused.key === key) delete mark.refused;
+  }
+
+  refusal(root) {
+    const mark = root ? root[MARK_KEY] : null;
+    return isPlainObject(mark) && isPlainObject(mark.refused) ? mark.refused : null;
+  }
+
+  dismissRefusal() {
+    const root = this.readRoot();
+    if (!root) return;
+    this.clearRefusal(root, null);
+    this.writeRoot(root);
+  }
+
+  /** The section of a modSettings write that grew the most, or the largest one when none grew. */
+  culpritSection(next, root) {
+    let best = ROOT_KEY;
+    let bestGrowth = -Infinity;
+    let largest = 0;
+    for (const k of Object.keys(next)) {
+      const size = jsonLength(next[k]);
+      const growth = size - jsonLength(root[k]);
+      if (growth > bestGrowth) {
+        bestGrowth = growth;
+        best = k;
+      }
+      if (growth <= 0 && size > largest && bestGrowth <= 0) {
+        largest = size;
+        best = k;
+      }
+    }
+    return best;
   }
 
   /** The public part of the root as JSON, or null when there are no sections. Cached until the row changes. */
@@ -428,8 +516,13 @@ class Keeper {
     if (!root) return this.log("error", "write of " + JSON.stringify(key) + " refused: store unreadable");
     if (this.isRootName(key)) return this.setRoot(root, text);
     const virt = isPlainObject(root[VIRTUAL_KEY]) ? root[VIRTUAL_KEY] : {};
+    const old = virt[key];
+    const delta = typeof old === "string" ? text.length - old.length : text.length + key.length + 6;
+    this.guard(root, key, delta, null);
+    this.estBytes += delta;
     virt[key] = text;
     root[VIRTUAL_KEY] = virt;
+    this.clearRefusal(root, key);
     this.writeRoot(root);
   }
 
@@ -438,8 +531,11 @@ class Keeper {
     const parsed = parse(text);
     if (!isPlainObject(parsed)) return this.log("error", "write of modSettings refused: not a JSON object");
     const next = withoutInternals(parsed);
+    const delta = text.length - (this.publicText(root) || "").length;
+    this.guard(root, ROOT_KEY, delta, () => this.culpritSection(next, root));
+    this.estBytes += delta;
     for (const ik of INTERNAL) if (root[ik] !== undefined) next[ik] = root[ik];
-    this.writeRoot(next);
+    this.writeRoot(next); // a shared-row refusal is cleared from the Options row only; every mod writes this key
   }
 
   removeItem(k) {
@@ -453,6 +549,7 @@ class Keeper {
       return;
     }
     if (isPlainObject(root[VIRTUAL_KEY]) && key in root[VIRTUAL_KEY]) {
+      this.estBytes -= jsonLength(root[VIRTUAL_KEY][key]);
       delete root[VIRTUAL_KEY][key];
       this.writeRoot(root);
     }
@@ -520,7 +617,10 @@ class Keeper {
       folded: this.folded.map(([k]) => k),
       virtualKeys: virt,
       slices: root ? Object.keys(withoutInternals(root)) : [],
-      blockedBytes: root && root[BLOCKED_KEY] ? root[BLOCKED_KEY].bytes : 0
+      blockedBytes: root && root[BLOCKED_KEY] ? root[BLOCKED_KEY].bytes : 0,
+      rowBytes: this.estBytes,
+      limitBytes: this.limit,
+      refused: this.refusal(root)
     };
   }
 
@@ -534,7 +634,8 @@ class Keeper {
     }
     const api = {
       build: BUILD, origin: this.origin, status: () => this.status(), uninstall: () => this.uninstall(),
-      engine: this.engine, rootKey: () => this.rootKey, flush: () => this.flush(), rebuild: () => this.rebuild()
+      engine: this.engine, rootKey: () => this.rootKey, flush: () => this.flush(), rebuild: () => this.rebuild(),
+      limitBytes: this.limit, dismissRefusal: () => this.dismissRefusal()
     };
     def("__settingsKeeper", api);
     this.sync = false;
@@ -635,7 +736,9 @@ try {
   else {
     const s = api.status();
     log("warn", "ready (build " + api.build + " from " + (api.origin || "?") + "): root " + JSON.stringify(s.rootKey) + ", rows " + s.rows + ", slices " + s.slices.length +
-      ", keys kept " + s.virtualKeys.length + (s.folded.length ? ", moved " + s.folded.join(", ") : "") +
+      ", keys kept " + s.virtualKeys.length + ", " + Math.round(s.rowBytes / 1024) + " KB" +
+      (s.refused ? ", a write by " + JSON.stringify(s.refused.by) + " was refused for size" : "") +
+      (s.folded.length ? ", moved " + s.folded.join(", ") : "") +
       (s.blocked ? ", BLOCKED by an unnamed row of " + s.blockedBytes + " bytes" : "") + (s.lengthShadowed ? "" : ", length not shadowed"));
     try {
       window.SettingsKeeper = api;

@@ -9,5 +9,10 @@
         <Replace Tag="LOC_TSK_REBUILD_DESCRIPTION" Language="ja_JP"><Text>共有設定より前に並ぶ保存項目があり、どのModが書き込んだのか判別できないため、このModは設定を予備の配置で保持しています。再構築するとそれらの項目を削除し、このModが保持しているすべてを1つの項目として書き戻します。このModが保持しているModの設定とキーはすべて保持されます。</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_TITLE" Language="ja_JP"><Text>ストレージを再構築しますか？</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_BODY" Language="ja_JP"><Text>このModが判別できなかった保存項目{1_Count}件を削除します。保持しているModの設定とキーはすべて残ります。この操作は元に戻せません。</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_LABEL" Language="ja_JP"><Text>ストレージの上限に達しました</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_CAPTION" Language="ja_JP"><Text>詳細</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_DESCRIPTION" Language="ja_JP"><Text>あるModが、ストレージに安全に保存できる量を超える設定を保存しようとしました。その書き込みは拒否され、そのModの以前の設定は保持されています。他のModには影響ありません。押すとModの名前とサイズを表示します。</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_TITLE" Language="ja_JP"><Text>ストレージの上限に達しました</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_BODY" Language="ja_JP"><Text>{1_Mod} がストレージを {2_Size} MB にする設定を保存しようとしました。上限は {3_Limit} MB のため、その書き込みは拒否され、以前の設定が保持されています。他のModには影響ありません。このModの作者に報告してください。OKでこの通知を消します。</Text></Replace>
     </LocalizedText>
 </Database>

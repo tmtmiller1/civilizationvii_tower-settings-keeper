@@ -9,5 +9,10 @@
         <Replace Tag="LOC_TSK_REBUILD_DESCRIPTION" Language="it_IT"><Text>Alcune voci salvate precedono le impostazioni condivise e la mod non riesce a stabilire quale mod le abbia scritte, quindi mantiene le impostazioni in una disposizione di riserva. La ricostruzione elimina quelle voci e riscrive tutto ciò che la mod conserva come un'unica voce. Tutte le impostazioni e le chiavi delle mod conservate dalla mod vengono mantenute.</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_TITLE" Language="it_IT"><Text>Ricostruire l'archivio?</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_BODY" Language="it_IT"><Text>{1_Count} voci salvate che la mod non è riuscita a identificare verranno eliminate. Tutte le impostazioni e le chiavi delle mod che conserva vengono mantenute. L'operazione non può essere annullata.</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_LABEL" Language="it_IT"><Text>Limite di archiviazione raggiunto</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_CAPTION" Language="it_IT"><Text>Dettagli</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_DESCRIPTION" Language="it_IT"><Text>Una mod ha provato a salvare più impostazioni di quante l'archivio possa contenere in sicurezza. Quella scrittura è stata rifiutata e le impostazioni precedenti della mod sono state conservate. Tutte le altre mod non sono interessate. Premi per vedere il nome della mod e le dimensioni.</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_TITLE" Language="it_IT"><Text>Limite di archiviazione raggiunto</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_BODY" Language="it_IT"><Text>{1_Mod} ha provato a salvare impostazioni che avrebbero portato l'archivio a {2_Size} MB. Il limite è di {3_Limit} MB, quindi quella scrittura è stata rifiutata e le impostazioni precedenti sono state conservate. Tutte le altre mod non sono interessate. Segnalalo all'autore di quella mod. OK rimuove questo avviso.</Text></Replace>
     </LocalizedText>
 </Database>

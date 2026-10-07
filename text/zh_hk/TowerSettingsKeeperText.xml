@@ -9,5 +9,10 @@
         <Replace Tag="LOC_TSK_REBUILD_DESCRIPTION" Language="zh_Hant_HK"><Text>有些已儲存的項目排在共用設定之前，而本模組無法判斷它們是由哪個模組寫入的，因此目前以備用配置保存設定。重建會刪除這些項目，並把本模組保存的全部內容寫回為一筆項目。本模組保存的所有模組設定與鍵值都會保留。</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_TITLE" Language="zh_Hant_HK"><Text>重建儲存空間？</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_BODY" Language="zh_Hant_HK"><Text>將刪除 {1_Count} 筆本模組無法辨識的已儲存項目。本模組保存的所有模組設定與鍵值都會保留。此操作無法復原。</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_LABEL" Language="zh_Hant_HK"><Text>已達到儲存上限</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_CAPTION" Language="zh_Hant_HK"><Text>詳情</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_DESCRIPTION" Language="zh_Hant_HK"><Text>某個模組嘗試儲存的設定超過了儲存空間可以安全容納的量。該寫入已被拒絕，該模組之前的設定已保留。其他所有模組不受影響。按下可查看模組名稱和大小。</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_TITLE" Language="zh_Hant_HK"><Text>已達到儲存上限</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_BODY" Language="zh_Hant_HK"><Text>{1_Mod} 嘗試儲存的設定會使儲存空間達到 {2_Size} MB。上限為 {3_Limit} MB，因此該寫入已被拒絕，之前的設定已保留。其他所有模組不受影響。請將此情況回報給該模組的作者。按「確定」清除此通知。</Text></Replace>
     </LocalizedText>
 </Database>

@@ -1,5 +1,7 @@
 # Tower Settings Keeper
 
+Read this in: [Deutsch](docs/readme/README.de_de.md) · [Español](docs/readme/README.es_es.md) · [Français](docs/readme/README.fr_fr.md) · [Italiano](docs/readme/README.it_it.md) · [日本語](docs/readme/README.ja_jp.md) · [한국어](docs/readme/README.ko_kr.md) · [Polski](docs/readme/README.pl_pl.md) · [Português (Brasil)](docs/readme/README.pt_br.md) · [Русский](docs/readme/README.ru_ru.md) · [简体中文](docs/readme/README.zh_cn.md) · [繁體中文](docs/readme/README.zh_hk.md)
+
 A Civilization VII mod. With it installed, the options you set in other mods stay set after you restart the game.
 It has no options of its own and does not change gameplay.
 
@@ -80,6 +82,9 @@ Content. There is nothing to configure.
   loads, before this mod has run, sees the old behaviour for that one launch. In every test launch so far this mod
   ran first.
 - The mod's own text is translated into all eleven languages the game supports.
+- The store has a size limit of 4 MB. That is eight times the 0.5 MB a store with 28 mods holds. A mod that tries to
+  go past it has that one write refused and keeps its earlier settings, and Options, Add-ons shows a "Storage limit
+  reached" row that names the mod. Nothing else is affected. See Load and limits below.
 - Nothing appears on screen, apart from one line in `Logs/UI.log` that starts with `[settings-keeper] ready:`. The
   exception is the fallback case above. Then Options, Add-ons shows a "Rebuild storage" row. Press it, confirm, and
   the entries the mod could not identify are deleted and the store is written back as one entry. The row goes away
@@ -88,6 +93,45 @@ Content. There is nothing to configure.
   | The row, shown only when needed | The confirmation |
   |---|---|
   | ![](docs/images/rebuild-row.png) | ![](docs/images/rebuild-dialog.png) |
+
+## Load and limits
+
+Everything lives in one row, so the row's size is the thing to watch. With 28 mods installed the row on the test
+machine is about 0.5 MB, nearly all of it one mod's game history. An options panel adds a few hundred bytes. A write
+serialises the whole row, about 8 ms at that size, once per task however many values are written in it. The number
+of mods does not matter on its own. What matters is how much they store.
+
+To find where the engine gives up, a probe grew the row by 1 MB per step through the keeper in a Play Now game with
+the same 28 mods, and separate launches tried the pieces on their own.
+
+| Row size | One write (serialise and store) | One key read after a write |
+|---|---|---|
+| 0.5 MB, the real store | 8 ms | 2 ms |
+| 5 MB | 71 ms | 20 ms |
+| 10 MB | 101 ms | 64 ms |
+| 13 MB | 141 ms | 67 ms |
+| 16 MB in one write | 102 ms | |
+| 20 MB, grown 1 MB at a time | 197 ms | |
+
+Nothing was lost or corrupted at any size, and the store stayed one row throughout. The game process itself has a
+ceiling. It stopped, without a crash report, at the 14 MB step when the row was parsed and rewritten several times
+in a row, and at the 21 MB step when it was only rewritten. A 14 MB store loaded at the main menu and in a game with
+every key readable, and then stopped when the row was re-read and rewritten once more. The process was at 1.9 GB
+when it stopped, so the ceiling is the game's memory, not the storage.
+
+The keeper therefore refuses any write that would take the row past 4 MB, a quarter of the lowest size at which the
+game stopped. The refused write throws the same `QuotaExceededError` a browser throws when its localStorage is full,
+so a mod written against the web API already knows what it means. The mod's earlier value stays, every other mod is
+untouched, the log names the mod and the sizes, and Options, Add-ons shows a "Storage limit reached" row with the
+same details and an OK that clears it. The limit is one constant at the top of `ui/settings-keeper.js`.
+
+| The row, after a 5 MB write was refused | Its dialog |
+|---|---|
+| ![](docs/images/limit-row.png) | ![](docs/images/limit-dialog.png) |
+
+Many small values are cheap: 2000 keys written in one go cost 21 ms, and 200 separate writes 6 ms each. A read
+costs about a millisecond at the real store's size, because the keeper re-reads the row to notice writes made
+around it, so a mod that reads thousands of keys in a loop will see that add up.
 
 ## Removing the mod
 

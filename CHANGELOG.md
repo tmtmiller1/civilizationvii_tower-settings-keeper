@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.0] - 2026-10-07
+
+- The store has a size limit of 4 MB. A write that would take the one row past it is refused with the standard
+  `QuotaExceededError`, the mod's earlier value is kept, and the log and a new "Storage limit reached" row under
+  Options, Add-ons name the mod and the sizes. OK on that row clears the notice. Nothing else is affected.
+- Load tested: the row was grown 1 MB at a time through the keeper with 28 mods installed. Writes of 16 MB in one go
+  and growth to 20 MB went through with nothing lost. The game process stopped at 14 MB under repeated re-reads and
+  at 21 MB under plain growth, which is where the limit comes from. The record is in the README and in
+  `docs/design.md`, Load and limits.
+- The README is translated into all eleven languages, under `docs/readme/`, and ships in the mod folder.
+- The `ready` line in `Logs/UI.log` now reports the row's size.
+
 ## [1.2.0] - 2026-10-07
 
 - The mod's text, including the Rebuild storage row and its confirmation, is translated into all eleven languages the

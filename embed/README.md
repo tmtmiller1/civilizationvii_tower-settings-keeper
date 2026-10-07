@@ -23,6 +23,10 @@ the game reads correctly, `modSettings`.
   merges it back. The shared-section pattern works unchanged.
 - `length` reports 1 and `key(i)` returns null, so the clear-on-second-entry helper never runs.
 - At start-up it repairs a store that another mod has already pushed out of order, without overwriting anything.
+- A write that would take the row past 4 MB is refused with the standard `QuotaExceededError` and the earlier value
+  is kept. The log names the key, or the section of `modSettings`, that asked. The game process stopped in testing
+  once the row passed about 14 MB. An embedded copy refuses and logs; the "Storage limit reached" row that shows the
+  notice in Options belongs to the standalone mod.
 
 ## Steps
 
@@ -47,7 +51,7 @@ the game reads correctly, `modSettings`.
 To confirm it ran, look for one line per scope in `Logs/UI.log`:
 
 ```
-[settings-keeper] ready (build 111 from <your mod folder>): root "modSettings", rows 1, slices 7, keys kept 2
+[settings-keeper] ready (build 112 from <your mod folder>): root "modSettings", rows 1, slices 7, keys kept 2, 530 KB
 ```
 
 ## Several mods carrying the file
@@ -69,10 +73,10 @@ copy when you next release. Nothing else is needed.
 - Avoid reading `localStorage` at the top level of your module. If your script happens to run before the keeper in
   some launch, that one read gets the engine's answer. Reads made later, when the player opens your panel or a game
   starts, go through the keeper.
-- The "Rebuild storage" row belongs to the standalone mod. Do not copy `sk-options.js`. An embedded copy covers
-  persistence. The row covers one rare repair for players who have the standalone mod.
+- The Options rows belong to the standalone mod. Do not copy `sk-options.js`. An embedded copy covers persistence
+  and the size limit. The rows cover one rare repair and the size notice for players who have the standalone mod.
 
-## Layout (version 1, build 111)
+## Layout (version 1, build 112)
 
 The real `modSettings` row is a JSON object with these keys:
 
@@ -80,11 +84,12 @@ The real `modSettings` row is a JSON object with these keys:
 |---|---|
 | `"<mod id>": { ... }` | a mod's section, as the options helpers keep it |
 | `"__ls": { "<key>": "<string>" }` | every other `localStorage` key, stored as a string |
-| `"__settings-keeper": { v: 1, root, since }` | the keeper's mark. A root without it is never used. |
+| `"__settings-keeper": { v: 1, root, since, refused? }` | the keeper's mark. A root without it is never used. `refused` holds the last write refused for size: `{ by, key, bytes, limit, at }`. |
 | `"__blocked": { at, bytes, value }` | present only after a rebuild: the text of a row the keeper could not identify |
 
-`window.SettingsKeeper` (also `localStorage.__settingsKeeper`) has `build`, `origin`, `status()`, `flush()`,
-`rebuild()` and `uninstall()`. Use it for diagnostics only. `rebuild()` exists for the standalone mod's Options row.
+`window.SettingsKeeper` (also `localStorage.__settingsKeeper`) has `build`, `origin`, `limitBytes`, `status()`,
+`flush()`, `rebuild()`, `dismissRefusal()` and `uninstall()`. Use it for diagnostics only. `rebuild()` and
+`dismissRefusal()` exist for the standalone mod's Options rows.
 
 ## Licence
 

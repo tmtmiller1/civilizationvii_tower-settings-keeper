@@ -40,6 +40,7 @@ rm -rf "$DIST_DIR"; mkdir -p "$TARGET_DIR/embed"
 cp "$MODINFO" README.md CHANGELOG.md LICENSE "$TARGET_DIR/"
 cp -R ui text "$TARGET_DIR/"
 cp embed/README.md "$TARGET_DIR/embed/README.md"
+mkdir -p "$TARGET_DIR/docs"; cp -R docs/readme "$TARGET_DIR/docs/readme"
 (cd "$DIST_DIR" && zip -qr "$ZIP_NAME" "$MOD_DIR" -x '*.DS_Store')
 
 # the modder-side kit: the one file plus its instructions

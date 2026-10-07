@@ -9,5 +9,10 @@
         <Replace Tag="LOC_TSK_REBUILD_DESCRIPTION" Language="es_ES"><Text>Algunas entradas guardadas se ordenan antes que la configuración compartida y el mod no puede saber qué mod las escribió, así que mantiene la configuración en una disposición de reserva. Al reconstruir se eliminan esas entradas y todo lo que el mod conserva se vuelve a escribir como una sola entrada. Se conservan todas las configuraciones y claves de mods que el mod guarda.</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_TITLE" Language="es_ES"><Text>¿Reconstruir el almacenamiento?</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_BODY" Language="es_ES"><Text>Se eliminarán {1_Count} entradas guardadas que el mod no pudo identificar. Se conservan todas las configuraciones y claves de mods que guarda. Esta acción no se puede deshacer.</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_LABEL" Language="es_ES"><Text>Límite de almacenamiento alcanzado</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_CAPTION" Language="es_ES"><Text>Detalles</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_DESCRIPTION" Language="es_ES"><Text>Un mod intentó guardar más ajustes de los que el almacén puede contener con seguridad. Esa escritura se rechazó y los ajustes anteriores del mod se conservaron. Los demás mods no se ven afectados. Pulsa para ver el nombre del mod y los tamaños.</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_TITLE" Language="es_ES"><Text>Límite de almacenamiento alcanzado</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_BODY" Language="es_ES"><Text>{1_Mod} intentó guardar ajustes que habrían llevado el almacén a {2_Size} MB. El límite es de {3_Limit} MB, así que esa escritura se rechazó y los ajustes anteriores se conservaron. Los demás mods no se ven afectados. Informa de esto al autor de ese mod. Aceptar quita este aviso.</Text></Replace>
     </LocalizedText>
 </Database>

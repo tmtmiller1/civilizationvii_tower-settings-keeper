@@ -9,5 +9,10 @@
         <Replace Tag="LOC_TSK_REBUILD_DESCRIPTION" Language="pl_PL"><Text>Niektóre zapisane wpisy sortują się przed wspólnymi ustawieniami, a mod nie potrafi ustalić, który mod je zapisał, dlatego przechowuje ustawienia w układzie zastępczym. Przebudowa usuwa te wpisy i zapisuje wszystko, co mod przechowuje, jako jeden wpis. Wszystkie ustawienia i klucze modów przechowywane przez mod zostają zachowane.</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_TITLE" Language="pl_PL"><Text>Przebudować magazyn?</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_BODY" Language="pl_PL"><Text>Zostanie usuniętych {1_Count} zapisanych wpisów, których mod nie zdołał rozpoznać. Wszystkie przechowywane ustawienia i klucze modów zostają zachowane. Tej operacji nie można cofnąć.</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_LABEL" Language="pl_PL"><Text>Osiągnięto limit pamięci</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_CAPTION" Language="pl_PL"><Text>Szczegóły</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_DESCRIPTION" Language="pl_PL"><Text>Jakiś mod próbował zapisać więcej ustawień, niż magazyn może bezpiecznie pomieścić. Ten zapis został odrzucony, a wcześniejsze ustawienia moda zachowane. Pozostałe mody nie są dotknięte. Naciśnij, aby zobaczyć nazwę moda i rozmiary.</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_TITLE" Language="pl_PL"><Text>Osiągnięto limit pamięci</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_BODY" Language="pl_PL"><Text>{1_Mod} próbował zapisać ustawienia, które powiększyłyby magazyn do {2_Size} MB. Limit wynosi {3_Limit} MB, więc ten zapis został odrzucony, a wcześniejsze ustawienia zachowane. Pozostałe mody nie są dotknięte. Zgłoś to autorowi tego moda. OK usuwa to powiadomienie.</Text></Replace>
     </LocalizedText>
 </Database>

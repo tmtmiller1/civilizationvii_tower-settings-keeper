@@ -9,5 +9,10 @@
         <Replace Tag="LOC_TSK_REBUILD_DESCRIPTION" Language="pt_BR"><Text>Algumas entradas salvas ficam antes das configurações compartilhadas e o mod não consegue saber qual mod as gravou, então ele mantém as configurações em uma disposição reserva. A reconstrução apaga essas entradas e grava de volta tudo o que o mod guarda como uma única entrada. Todas as configurações e chaves de mods guardadas pelo mod são mantidas.</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_TITLE" Language="pt_BR"><Text>Reconstruir o armazenamento?</Text></Replace>
         <Replace Tag="LOC_TSK_REBUILD_CONFIRM_BODY" Language="pt_BR"><Text>{1_Count} entradas salvas que o mod não conseguiu identificar serão apagadas. Todas as configurações e chaves de mods que ele guarda são mantidas. Isso não pode ser desfeito.</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_LABEL" Language="pt_BR"><Text>Limite de armazenamento atingido</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_CAPTION" Language="pt_BR"><Text>Detalhes</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_DESCRIPTION" Language="pt_BR"><Text>Um mod tentou guardar mais configurações do que o armazenamento comporta com segurança. Essa gravação foi recusada e as configurações anteriores do mod foram mantidas. Todos os outros mods não são afetados. Pressione para ver o nome do mod e os tamanhos.</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_TITLE" Language="pt_BR"><Text>Limite de armazenamento atingido</Text></Replace>
+        <Replace Tag="LOC_TSK_LIMIT_BODY" Language="pt_BR"><Text>{1_Mod} tentou guardar configurações que levariam o armazenamento a {2_Size} MB. O limite é {3_Limit} MB, então essa gravação foi recusada e as configurações anteriores foram mantidas. Todos os outros mods não são afetados. Informe isso ao autor desse mod. OK remove este aviso.</Text></Replace>
     </LocalizedText>
 </Database>
