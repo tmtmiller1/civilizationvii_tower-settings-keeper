@@ -207,6 +207,11 @@ game's own OK/Cancel dialog opened with the count ("3 stored entries..."), OK re
 and keys kept, one row), the row hid, and the next launch was in the normal layout with the row hidden. Text is loaded
 in both scopes (first in-game run showed raw LOC keys; fixed before release).
 
+Embedded copy (runs `E-clean`, `E-poison`, `E-both`, 2026-10-07): the same file listed first in Demographics' shell
+and game UIScripts, standalone mod NOT installed: first script line in both scopes, normal layout on the clean store,
+the 2026-10-06 store folded and collapsed to one row; with the standalone installed as well, one keeper (the second
+copy finds it and stands down), both copies log `ready`.
+
 1.0.1 (runs `V2-poison`, `V2-clean`, `O-regress`): the 2026-10-06 store ends in the normal layout, one real row, with
 AutoMissionary's values read through the keeper and the clobbered row's slice salvaged; the clean store is unchanged;
 the Options screen in the menu and in a game reads back all seven values set in the 1.0.0 run.
