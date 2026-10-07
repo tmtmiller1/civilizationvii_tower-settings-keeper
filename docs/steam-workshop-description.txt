@@ -1,27 +1,27 @@
 [h1]Tower Settings Keeper[/h1]
-[b]Version 1.1.2. For Civilization VII 1.5.0.[/b]
-Makes mod settings survive a restart. Install it and the options you set in other mods stay set, in the main menu and in a game. No settings of its own, no effect on gameplay, nothing to configure.
-[h2]The problem it fixes[/h2]
-Civilization VII's saved-settings store answers every read with the first entry it stored, whichever mod asked, and the store cannot be listed. A mod can only read its settings back if its entry happens to sort first. Every other mod gets some other mod's data, treats it as its own, and when it saves, writes that data back under its own name. The visible result is options panels that forget everything between launches, or one mod's settings turning up inside another. About fifty Workshop mods carry a helper that erases the whole store the moment a second entry appears, so a single mod with an entry of its own wipes every other mod's settings on the next save.
-[h2]What it does[/h2]
+[b]Version 1.1.3. For Civilization VII 1.5.0.[/b]
+With this mod installed, the options you set in other mods stay set after you restart the game. It has no options of its own, does not change gameplay, and needs no setup.
+[h2]The problem[/h2]
+Mods keep their settings in the game's saved-settings store. That store has a bug: a read returns the first entry in it, no matter which entry was asked for, and there is no way to list the entries. A mod can read its own settings only if its entry happens to sort first. Every other mod gets a different mod's data, treats it as its own, and writes it back under its own name the next time it saves. Players see options panels that reset between launches, and sometimes one mod's settings showing up inside another. About fifty Workshop mods also include a helper that clears the whole store as soon as it sees a second entry, so one mod that stores its settings under its own entry wipes every other mod's settings on the next save.
+[h2]What the mod does[/h2]
 [list]
-[*]Keeps every mod's entry inside the one row the game reads correctly and answers every read and write from it.
-[*]Options panels that share the usual settings entry work as written; mods that keep an entry of their own get it stored and read back under its name.
-[*]The store never looks like it holds more than one entry, so the erase-on-second-entry helper never fires.
-[*]On a store that another mod has already pushed out of order it moves the entries it can name into place and leaves anything it cannot name untouched, then looks again on every launch. Existing mod data is never overwritten.
-[*]Mods do not need to be updated for it; it works with the ones that already exist.
+[*]Keeps every mod's entry inside the one row the game can read and answers every read and write from that row.
+[*]Options panels that share the usual settings entry work as before. Mods that use their own entry get it stored and read back under that name.
+[*]The store always reports a single entry, so the clear-on-second-entry helper never runs.
+[*]If another mod has already pushed the store out of order, it moves the entries it can identify into place, leaves the rest alone, and checks again on every launch. It never overwrites another mod's data.
+[*]Other mods do not need updates. It works with the mods already on the Workshop.
 [/list]
-[h2]What to expect[/h2]
+[h2]Things to know[/h2]
 [list]
-[*]Settings saved from now on stay. Settings lost before the keeper was installed are gone unless they are still on disk in an entry the keeper can name.
-[*]Nothing shows on screen, with one exception: while the keeper has had to work around entries it could not tell apart, Options, Add-ons shows a Rebuild storage row. Press it, confirm, and the store is one entry again. The row disappears once the store is normal.
-[*]If that row is showing, press it before disabling the mod; otherwise the helper in other mods would clear the store on its next save.
-[*]Tested on 1.5.0 with 28 mods, Tower's and others', including the common options helpers, mods that keep an entry of their own, and a settings manager. The full test record is on GitHub.
+[*]Settings you save from now on stay. Settings that were lost before you installed the mod are gone, unless they are still on disk under an entry the mod can identify.
+[*]Nothing appears on screen, with one exception. If the mod has had to work around entries it could not identify, Options, Add-ons shows a Rebuild storage row. Press it, confirm, and the store is one entry again. The row goes away once the store is normal.
+[*]If that row is showing, press it before you disable the mod. Otherwise the helper in other mods will clear the store on its next save.
+[*]Tested on 1.5.0 with 28 mods, including the common options helpers, mods that use their own entry, and a settings manager. The full test record is on GitHub.
 [/list]
 [h2]For modders[/h2]
-You can ship the keeper inside your own mod so your players get it without installing anything else: copy ui/settings-keeper.js from this mod's folder, unchanged, list it as the first UIScript of both your shell and game action groups, and leave your settings code as it is. embed/README.md in the same folder has the rules and the layout contract. Several mods carrying the file cost nothing: the first copy to load installs, the others find it and stand down, and a newer build replaces an older one.
+You can ship this fix inside your own mod, so your players get it without installing anything else. Copy ui/settings-keeper.js from this mod's folder without changing it, list it as the first UIScript of both your shell and game action groups, and keep your settings code as it is. The file embed/README.md in the same folder has the rules and the storage layout. Several mods can carry the file at once. The first copy to load installs, later copies find it and do nothing, and a newer build replaces an older one.
 [h2]Source and documentation[/h2]
 [list]
-[*]Open source on GitHub: [url=https://github.com/tmtmiller1/civilizationvii_tower-settings-keeper]source, design and the test record[/url], and the [url=https://github.com/tmtmiller1/civilizationvii_tower-settings-keeper/releases]release notes[/url] with the zip for a manual install and the modder kit.
+[*][url=https://github.com/tmtmiller1/civilizationvii_tower-settings-keeper]Source, design notes and the test record on GitHub[/url], and the [url=https://github.com/tmtmiller1/civilizationvii_tower-settings-keeper/releases]releases[/url], with the zip for a manual install and the kit for modders.
 [/list]
 This mod is developed with [url=https://github.com/tmtmiller1/civilizationvii_tower-bench]Tower Bench[/url], a free, open-source test bench for Civilization VII mods.

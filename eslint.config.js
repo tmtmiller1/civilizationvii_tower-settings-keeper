@@ -1,4 +1,4 @@
-// Dev-only ESLint flat config, the same limits the other tower mods use. Not shipped.
+// ESLint flat config for development, with the same limits the other Tower mods use. Not shipped.
 export default [
   {
     files: ["ui/**/*.js"],

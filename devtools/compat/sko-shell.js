@@ -1,6 +1,5 @@
-// sko-shell.js - shell scope (main menu). __PHASE__ 1: change MENU_SET on the real Options screen, confirm, quit.
-// 2 and 3: open the Options screen, record and screenshot what it shows after the restart, confirm, start a game.
-//__COMMON__
+// sko-shell.js - shell scope, the main menu. __PHASE__ 1: change MENU_SET on the real Options screen, confirm, quit.
+// Phases 2 and 3: open the Options screen, record and screenshot what it shows after the restart, confirm, start a game.
 const PHASE = "__PHASE__";
 emit("shell attached phase " + PHASE + "; keeper=" + J(status()));
 setTimeout(async () => {

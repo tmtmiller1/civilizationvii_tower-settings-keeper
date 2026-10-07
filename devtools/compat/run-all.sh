@@ -1,6 +1,6 @@
 #!/bin/zsh
-# run-all.sh - the four-launch compatibility run. A harvests, B writes, C reads back after a restart (store carried
-# from B), D starts on the poisoned store from 2026-10-06. The player's store is put back after every launch.
+# run-all.sh - the four-launch compatibility run. A harvests, B writes, C reads back after a restart with the store
+# carried from B, D starts on the poisoned store from 2026-10-06. The player's store is put back after every launch.
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"; R="$HERE/runs"
 POISONED="$HOME/Library/Application Support/Civilization VII/cd-harness-backup/localstorage-recovery-2026-10-06/live-copy.sqlite"

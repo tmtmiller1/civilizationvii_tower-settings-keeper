@@ -1,5 +1,5 @@
 // sko-perf.js - game scope. How long a write costs through the keeper with the player's real root (hundreds of KB),
-// against the engine's own write of the same size and of a small value. Runs at game start; the runner restores
+// against the engine's own write of the same size and of a small value. Runs at game start. The runner restores
 // the store afterwards.
 const PHASE = "__PHASE__";
 const TAG = "[SKC]";

@@ -4,12 +4,12 @@
 # Usage:  ./release.sh
 # Output: dist/tower-settings-keeper-vX.Y.Z.zip     (X.Y.Z from the modinfo <Version>; one folder, tower-settings-keeper/,
 #                                                     with the modinfo at its root)
-#         dist/settings-keeper-embed-vX.Y.Z.zip      (the one file plus embed/README.md and the licence, for modders)
-#         dist/workshop_item.vdf                      (steamcmd manifest, no previewfile; set the preview on the web page)
-# The mod folder carries embed/README.md as well, so a Workshop subscription is the kit too (the game ignores it).
-# The change note comes from CHANGELOG.steam.txt (scripts/steam-changelog.mjs keeps it in step with CHANGELOG.md).
+#         dist/settings-keeper-embed-vX.Y.Z.zip      (the file plus embed/README.md and the licence, for modders)
+#         dist/workshop_item.vdf                      (steamcmd manifest, no preview file; set the preview on the web page)
+# The mod folder includes embed/README.md, so a Workshop subscription is the kit too. The game ignores the file.
+# The change note comes from CHANGELOG.steam.txt, which scripts/steam-changelog.mjs keeps in step with CHANGELOG.md.
 # The description is included only for the first upload (no steam_workshop_id.txt yet) or when WITH_DESCRIPTION=1.
-# Runs the quality gate first (lint, syntax, tests); set SKIP_VERIFY=1 to bypass.
+# The quality gate (lint, syntax, tests) runs first. Set SKIP_VERIFY=1 to skip it.
 
 set -euo pipefail
 cd "$(dirname "$0")"

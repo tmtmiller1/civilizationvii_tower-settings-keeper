@@ -1,6 +1,6 @@
 #!/bin/zsh
-# run-func.sh - behaviour that depends on the persisted options, control (player's own store, defaults) vs
-# persisted (the store the Options run left, runs/O3/LocalStorage.sqlite.post). Two launches.
+# run-func.sh - behaviour that depends on the saved options. Control (the player's own store, defaults) against
+# saved values (the store the Options run left, runs/O3/LocalStorage.sqlite.post). Two launches.
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"; R="$HERE/runs"
 export PROBE_SHELL=skc-shell.js PROBE_GAME=sko-func.js TIMEOUT=600

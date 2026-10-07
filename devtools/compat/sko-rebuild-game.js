@@ -1,7 +1,4 @@
-// sko-rebuild-game.js - game scope twin of sko-rebuild.js: the same steps from the in-game Options screen. __PHASE__ 1 on a store with two unnameable entries: the keeper is in fallback
-// layout, the Rebuild row shows in Options, pressing it opens the confirm dialog, accepting rebuilds the store.
-// __PHASE__ 2 (store carried over): the keeper is in the normal layout and the row is hidden.
-//__COMMON__
+// sko-rebuild-game.js - game scope twin of sko-rebuild.js: the same steps from the in-game Options screen.
 const PHASE = "__PHASE__";
 const ROW = "tsk-rebuild";
 function rowState() {

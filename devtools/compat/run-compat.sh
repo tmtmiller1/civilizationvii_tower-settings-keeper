@@ -1,13 +1,14 @@
 #!/bin/zsh
 # run-compat.sh <label> <phase> [seed LocalStorage.sqlite]
 #   PAIRS_JSON=<file>   the harvested [{mod,opt,cur}] list for phases B and C (default [])
-#   NO_KEEPER=1                        do not install the standalone keeper (test a copy embedded in another mod)
-#   PROBE_SHELL=<js> PROBE_GAME=<js>   probe scripts to install (default skc-shell.js / skc-game.js); __PHASE__ and
+#   NO_KEEPER=1         do not install the standalone keeper (to test a copy embedded in another mod)
+#   PROBE_SHELL=<js> PROBE_GAME=<js>   probe scripts to install (default skc-shell.js and skc-game.js). __PHASE__ and
 #                                      __PAIRS__ are substituted in both. A "[SKC] SHOT <name>" line captures the game
-#                                      window (by window id, never the display) to <run>/shot-<name>.png.
-# One launch of Civ VII with the player's enabled mods PLUS the disabled local settings mods, AutoMissionary (corpus
-# copy), the Tower Settings Keeper (dev copy) and the probe. Play Now game, no turns. Backs up and restores the registry,
-# LocalStorage, autosaves, Hall of Fame and AppOptions. Run folder: devtools/compat/runs/<label>/.
+#                                      window by window id, never the whole display, to <run>/shot-<name>.png.
+#   AM_SRC=<path>       an AutoMissionary mod folder to install for the run; empty skips it
+# One launch of Civ VII with the player's enabled mods, the disabled local settings mods, AutoMissionary, the
+# Settings Keeper (dev copy) and the probe. Play Now game, no turns. Backs up and restores the registry, LocalStorage,
+# autosaves, Hall of Fame and AppOptions. Run folder: devtools/compat/runs/<label>/.
 set -u
 LABEL="$1"; PHASE="$2"; SEED="${3:-}"
 S="$HOME/Library/Application Support/Civilization VII"; DB="$S/Mods.sqlite"; MODS="$S/Mods"; LOG="$S/Logs/UI.log"

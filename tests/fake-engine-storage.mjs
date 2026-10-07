@@ -1,7 +1,7 @@
-// fake-engine-storage.mjs - a Storage with Civilization VII 1.5.0's behaviour, for the tests.
-// getItem ignores its key and returns the first row in key order; key(i) is null; the empty key and keys starting
-// with NUL are dropped; setItem, removeItem, clear and length are correct. Methods and length live on the
-// prototype, as Storage.prototype does in the game.
+// fake-engine-storage.mjs - a Storage with the behaviour of Civilization VII 1.5.0, for the tests.
+// getItem ignores its key and returns the first row in key order. key(i) is null. The empty key and keys that start
+// with NUL are dropped. setItem, removeItem, clear and length are correct. Methods and length live on the prototype,
+// as they do on Storage.prototype in the game.
 export class FakeEngineStorage {
   constructor(rows = {}) {
     this._rows = new Map();

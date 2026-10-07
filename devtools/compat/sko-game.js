@@ -1,6 +1,5 @@
-// sko-game.js - game scope. __PHASE__ 2: open the in-game Options screen, change GAME_SET, confirm. 3: open it and
-// record and screenshot what it shows after the restart. (Phase 1 never reaches the game.)
-//__COMMON__
+// sko-game.js - game scope. __PHASE__ 2: open the in-game Options screen, change GAME_SET, confirm. Phase 3: open it
+// and record and screenshot what it shows after the restart. Phase 1 never reaches the game.
 const PHASE = "__PHASE__";
 emit("game attached phase " + PHASE + "; keeper=" + J(status()));
 async function run() {

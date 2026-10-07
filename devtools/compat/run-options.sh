@@ -1,10 +1,10 @@
 #!/bin/zsh
-# run-options.sh - three launches through the REAL Options screen, with screenshots of the game window.
-#   1  main menu: change four options (bz Map Trix, sib, Canals, Cultural Diffusion), Confirm, quit; no game
-#   2  main menu after a restart: the same rows as the screen shows them; then a game, where three other options
-#      are changed on the in-game Options screen and confirmed
-#   3  after another restart: the Options screen in the menu and in a game, all seven rows
-# The store is carried from launch to launch and the player's own store put back after each one.
+# run-options.sh - three launches through the real Options screen, with screenshots of the game window.
+#   1  main menu: change four options (bz Map Trix, sib, Canals, Cultural Diffusion), Confirm, quit. No game.
+#   2  main menu after a restart: the same rows as the screen shows them. Then a game, where three other options
+#      are changed on the in-game Options screen and confirmed.
+#   3  after another restart: the Options screen in the menu and in a game, all seven rows.
+# The store is carried from launch to launch and the player's own store is put back after each one.
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"; R="$HERE/runs"
 build() { python3 - "$HERE/sko-common.js" "$HERE/$1" "$HERE/_built-$1" <<'EOF'

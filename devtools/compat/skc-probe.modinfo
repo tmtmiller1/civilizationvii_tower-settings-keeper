@@ -2,7 +2,7 @@
 <Mod id="skc-probe" version="1" xmlns="ModInfo">
     <Properties>
         <Name>Tower Settings Keeper compat probe (dev)</Name>
-        <Description>Dev-only. Starts a Play Now game and drives other mods' settings code through the keeper. Not for release.</Description>
+        <Description>Development only. Starts a Play Now game and drives other mods' settings code through the keeper. Not for release.</Description>
         <Authors>Tower</Authors>
         <Package>SkcProbe</Package>
         <PackageSortIndex>9999</PackageSortIndex>

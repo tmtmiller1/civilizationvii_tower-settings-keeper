@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Every tag unique: one duplicate LOC tag rolls back the whole file. -->
+<!-- Every tag must be unique. A duplicate tag makes the game drop the whole file. -->
 <Database>
     <EnglishText>
         <Row Tag="LOC_SETTINGS_KEEPER_MOD_NAME">
             <Text>Tower Settings Keeper</Text>
         </Row>
         <Row Tag="LOC_SETTINGS_KEEPER_MOD_DESCRIPTION">
-            <Text>Makes mod settings survive a restart. The game answers every saved-settings read with the first entry it stored, whichever mod asked, so options panels lose what they saved and can overwrite each other. Tower Settings Keeper keeps every mod's entry inside the one row the game reads correctly and answers every read and write from it, in the main menu and in the game. Works with mods that have not been updated for it. No settings of its own.</Text>
+            <Text>Keeps mod settings across restarts. Civilization VII returns the first stored entry for every settings read, no matter which mod asked, so options panels reset between launches and mods can overwrite each other's settings. This mod keeps every mod's entry inside the one row the game reads correctly and answers all reads and writes from it, in the main menu and in a game. It works with mods that have not been updated for it and has no settings of its own.</Text>
         </Row>
         <Row Tag="LOC_OPTIONS_GROUP_TOWER_SETTINGS_KEEPER">
             <Text>Tower Settings Keeper</Text>
@@ -18,13 +18,13 @@
             <Text>Rebuild storage</Text>
         </Row>
         <Row Tag="LOC_TSK_REBUILD_DESCRIPTION">
-            <Text>Entries the keeper could not tell apart sit ahead of the shared settings, so it is keeping settings in a fallback layout. Rebuilding deletes those entries and writes everything the keeper holds back as one entry. Every mod's settings and keys the keeper holds are kept.</Text>
+            <Text>Some stored entries sort ahead of the shared settings and the mod cannot tell which mod wrote them, so it is keeping settings in a fallback layout. Rebuilding deletes those entries and writes everything the mod holds back as one entry. All mod settings and keys the mod holds are kept.</Text>
         </Row>
         <Row Tag="LOC_TSK_REBUILD_CONFIRM_TITLE">
             <Text>Rebuild storage?</Text>
         </Row>
         <Row Tag="LOC_TSK_REBUILD_CONFIRM_BODY">
-            <Text>{1_Count} stored entries the keeper could not tell apart will be deleted. Every mod's settings and keys the keeper holds are kept. This cannot be undone.</Text>
+            <Text>{1_Count} stored entries that the mod could not identify will be deleted. All mod settings and keys it holds are kept. This cannot be undone.</Text>
         </Row>
     </EnglishText>
 </Database>

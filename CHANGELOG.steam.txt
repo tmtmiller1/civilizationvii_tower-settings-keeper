@@ -3,36 +3,40 @@ Generated from CHANGELOG.md by scripts/steam-changelog.mjs; release.sh uploads t
 To fix an old Workshop entry, paste the text under its ==== line into that entry's Edit box on the change-notes page.
 A block edited by hand is kept as-is. Delete a block to regenerate it from CHANGELOG.md.
 
-==== 1.1.2 | 2026-10-07 | src e5b58f20a5f4 | gen 198373506325 ====
+==== 1.1.3 | 2026-10-07 | src bfa977bfa886 | gen 9b71770fc50e ====
+[b]Version 1.1.3 · 7 October 2026[/b]
+• Clearer wording in the in-game text, the Options row and the documentation. No change in behaviour.
+
+==== 1.1.2 | 2026-10-07 | src d1cc49d68f42 | gen 5fa24853b44e ====
 [b]Version 1.1.2 · 7 October 2026[/b]
-• The mod folder now carries the modder kit as well (embed/README.md beside ui/settings-keeper.js), so a Workshop subscription is all another mod author needs. Steam Workshop manifest and description added. No change in game.
+• The mod folder now includes the modder kit (embed/README.md next to ui/settings-keeper.js), so a Workshop subscription is all another mod author needs. Steam Workshop manifest and description added. No change in game.
 
-==== 1.1.1 | 2026-10-07 | src 270277e3cd60 | gen 7be9dba532b8 ====
+==== 1.1.1 | 2026-10-07 | src 547341680404 | gen 56aff65000d6 ====
 [b]Version 1.1.1 · 7 October 2026[/b]
-• Modder-side kit: embed/README.md and the release asset settings-keeper-embed-<version>.zip (the one file plus instructions) for shipping the keeper inside another mod.
-• The log line names which mod's copy is running, and a build handoff says which copy replaced which.
+• Modder kit: embed/README.md and the release asset settings-keeper-embed-<version>.zip (the file plus instructions) for shipping the fix inside another mod.
+• The log line names the mod whose copy is running. When a newer copy replaces an older one, the log says which.
 
-==== 1.1.0 | 2026-10-07 | src 6a5ef6564f1f | gen d02e7e170ad4 ====
+==== 1.1.0 | 2026-10-07 | src e9d98449933f | gen 76644da014b6 ====
 [b]Version 1.1.0 · 7 October 2026[/b]
-• A “Rebuild storage” row in Options, Add-ons, shown only while the keeper is in its fallback layout (two or more stored entries it could not tell apart ahead of the shared settings). A confirm dialog says how many entries go; rebuilding drops them and writes everything the keeper holds back as the one normal row. Nothing shows otherwise.
-• Several mods may ship this file; the newest build on the machine is the one that runs.
+• A “Rebuild storage” row in Options, Add-ons. It appears only while the mod is in its fallback layout, which happens when two or more stored entries it cannot identify sit ahead of the shared settings. A confirmation says how many entries will be deleted. Rebuilding deletes them and writes everything the mod holds back as one row.
+• Several mods may ship the file. The newest build on the machine is the one that runs.
 
-==== 1.0.3 | 2026-10-06 | src 26ab48322e95 | gen 986eb26d3562 ====
+==== 1.0.3 | 2026-10-06 | src 0257f8690446 | gen a570d4f98dff ====
 [b]Version 1.0.3 · 6 October 2026[/b]
-• Writes made in the same moment are combined into one engine write (reads in between see them at once), so a mod that saves many pieces in a row no longer stalls the game for the sum of them. Measured with a 530 KB store: sixty consecutive writes went from 0.6 s to one write of about 8 ms.
+• Writes made in the same moment are combined into one engine write. Reads in between see the new values at once. A mod that saves many pieces in a row no longer stalls the game for the sum of them. With a 530 KB store, sixty consecutive writes went from 0.6 s to one write of about 8 ms.
 
-==== 1.0.2 | 2026-10-06 | src 23e677da4ca6 | gen 682d4a2ac857 ====
+==== 1.0.2 | 2026-10-06 | src 68546e2a80d7 | gen d999fba5ce2b ====
 [b]Version 1.0.2 · 6 October 2026[/b]
-• key(i) answers null, exactly as the game does, so a mod that lists keys to remove them changes nothing, as before.
+• key(i) returns null, as the game does. A mod that lists keys in order to remove them has always done nothing, and still does.
 
-==== 1.0.1 | 2026-10-06 | src 1563a152cd35 | gen dd62b7fedee8 ====
+==== 1.0.1 | 2026-10-06 | src 5595147ce7e3 | gen 7f3f4e88f60f ====
 [b]Version 1.0.1 · 6 October 2026[/b]
-• A store whose only remaining entry cannot be named is rebuilt around that entry (its text and slices kept) instead of being left in the fallback layout, so the store is one row and removing the keeper later is safe.
-• A kept copy of an unnamed entry moves under its name once a later key list recognises it.
-• Stale raw copies hiding behind the root for keys the keeper already holds are removed.
+• When the only remaining entry cannot be identified, the store is rebuilt around it and its contents are kept, instead of being left in the fallback layout. The store is then one row, and removing the mod later is safe.
+• A kept copy of an unidentified entry moves under its name once a later version recognises it.
+• Old raw copies hidden behind the root, for keys the mod already holds, are removed.
 
-==== 1.0.0 | 2026-10-06 | src 1c42e73fd494 | gen a702c26561c4 ====
+==== 1.0.0 | 2026-10-06 | src 0f6c0d69c81c | gen a4c59e838a04 ====
 [b]Version 1.0.0 · 6 October 2026[/b]
-• First release. Every localStorage key kept inside the one row the game reads correctly; modSettings passed through for the options helpers; the store reports one entry; entries another mod pushed ahead of the root are moved into place when they can be named and left untouched when they cannot.
-• The root always carries the keeper's mark and is never built on a row without it, so a row another mod writes raw can never be copied over the shared settings.
-• A store the keeper could not sort out is re-examined on every launch and brought back to the normal layout once the row in the way can be named.
+• First release. Every localStorage key is kept inside the one row the game reads correctly. modSettings is passed through for the options helpers. The store reports one entry. Entries another mod pushed ahead of the root are moved into place when they can be identified and left alone when they cannot.
+• The root always carries the mod's mark and is never built on a row without it. A row another mod writes raw can never be copied over the shared settings.
+• A store the mod could not sort out is checked again on every launch and brought back to the normal layout once the row in the way can be identified.

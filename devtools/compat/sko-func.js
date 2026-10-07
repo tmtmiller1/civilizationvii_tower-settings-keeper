@@ -1,9 +1,9 @@
-// sko-func.js - game scope. Measures BEHAVIOUR that depends on the persisted options, in a fresh process:
-//   bz Map Trix: the yield-banner restyle (body class + the computed style it drives) and which lens the mod
-//                activates when the scout vs. the warrior is selected (RECON setting vs. the default MILITARY)
+// sko-func.js - game scope. Measures behaviour that depends on the saved options, in a fresh process:
+//   bz Map Trix: the yield-banner restyle (body class and the computed style it drives), and which lens the mod
+//                activates when the scout and the warrior are selected (RECON setting against the default MILITARY)
 //   Cultural Diffusion: its live CONFIG after its own applyTunableOverrides()
-//   Canals: the GameConfiguration pin the mod writes at game start (the runner also greps its "rules:" line)
-// Run once on the player's untouched store (control) and once on the store from the Options run (persisted).
+//   Canals: the GameConfiguration pin the mod writes at game start. The runner also greps its "rules:" line.
+// Run once on the player's untouched store (control) and once on the store from the Options run (saved values).
 const PHASE = "__PHASE__";
 const TAG = "[SKC]";
 function emit(m) { try { console.error(TAG + " " + m); } catch (_) {} }

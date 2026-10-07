@@ -1,8 +1,8 @@
-// sk-options.js - the one row the keeper ever shows in Options, Add-ons: "Rebuild storage", and only while the
-// keeper is in its fallback layout (two or more stored entries it could not name sit ahead of the shared settings).
-// Rebuilding drops those entries and writes everything the keeper holds back as the one normal row. A confirm
-// dialog states how many entries go. Separate from settings-keeper.js on purpose: that file must stay import-free so
-// the loader runs it first; this one can wait for the Options screen.
+// sk-options.js - the one row the keeper ever shows in Options, Add-ons: "Rebuild storage". It is visible only while
+// the keeper is in its fallback layout, which means two or more stored entries it could not identify sit ahead of
+// the shared settings. Rebuilding deletes those entries and writes everything the keeper holds back as the one
+// normal row. A confirmation says how many entries will go. This is a separate file from settings-keeper.js because
+// that file must stay free of imports so the loader runs it first. This one can wait for the Options screen.
 import { CategoryType, OptionType, Options } from "/core/ui/options/model-options.js";
 import DialogBoxManager, { DialogBoxAction } from "/core/ui/dialog-box/manager-dialog-box.js";
 

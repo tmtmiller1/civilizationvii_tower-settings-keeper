@@ -1,4 +1,4 @@
-// sk-core.test.mjs - the keeper on a store that behaves like the game's.
+// sk-core.test.mjs - the keeper against a store that behaves like the game's.
 import test from "node:test";
 import assert from "node:assert/strict";
 import { install, ROOT_KEY, FALLBACK_ROOT_KEY, VIRTUAL_KEY, MARK_KEY, BLOCKED_KEY, BUILD, looksLikeRoot, KNOWN_KEYS } from "../ui/settings-keeper.js";

@@ -1,7 +1,7 @@
-// sko-lens.js - game scope. bz Map Trix activates its commander lens on unit selection according to the persisted
-// "Commander lens activation" setting: default MILITARY (2) = military units only, RECON (3) = recon units too.
-// A Play Now start has only a Founder, so the AI plays a few turns until a scout and a warrior exist, then each is
-// selected and the active lens read. Control vs persisted.
+// sko-lens.js - game scope. bz Map Trix activates its commander lens on unit selection according to the saved
+// "Commander lens activation" setting: the default MILITARY (2) means military units only, RECON (3) adds recon units.
+// A Play Now start has only a Founder, so the AI plays a few turns until a scout and a warrior exist. Then each is
+// selected and the active lens is read. Control against saved values.
 const PHASE = "__PHASE__";
 const TAG = "[SKC]";
 function emit(m) { try { console.error(TAG + " " + m); } catch (_) {} }

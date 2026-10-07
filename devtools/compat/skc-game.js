@@ -1,10 +1,10 @@
-// skc-game.js - game scope. One phase per launch (the runner substitutes __PHASE__ and __PAIRS__):
-//   A  report the keeper's state; the runner harvests every "LOAD mod.option=value" line the other mods logged
-//   B  write a value for every harvested option through that mod's own settings module where it can be imported
-//      (else through the same read-modify-write the helper does), write the own-key mods' settings through their
-//      own code, and read everything back in the same launch
-//   C  read everything back after a restart (the other mods' own LOAD lines at start are the primary evidence)
-//   D  report the keeper's state on a seeded, poisoned store, and what AutoMissionary reads
+// skc-game.js - game scope. One phase per launch; the runner substitutes __PHASE__ and __PAIRS__.
+//   A  report the keeper's state. The runner then harvests every "LOAD mod.option=value" line the other mods logged.
+//   B  write a value for every harvested option through that mod's own settings module where it can be imported,
+//      otherwise through the same read-modify-write the helper does. Write the own-key mods' settings through their
+//      own code. Read everything back in the same launch.
+//   C  read everything back after a restart. The other mods' own LOAD lines at start are the main evidence.
+//   D  report the keeper's state on a seeded, poisoned store, and what AutoMissionary reads.
 const PHASE = "__PHASE__";
 const PAIRS = __PAIRS__; // [{mod, opt, cur}] ; opt null = a whole-slice helper (LOAD mod=json)
 const TAG = "[SKC]";

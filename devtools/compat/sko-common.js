@@ -1,5 +1,5 @@
-// sko-common.js - shared by the Options-screen probes (the runner concatenates it ahead of each phase script).
-// Drives the REAL Options screen: opens it on the Add-ons tab, reads the Options model, flips a checkbox / switch
+// sko-common.js - shared by the Options-screen probes. The runner pastes it ahead of each phase script.
+// Drives the real Options screen: opens it on the Add-ons tab, reads the Options model, flips a checkbox or switch
 // through its component's toggle(), picks a dropdown item through onItemSelected(), scrolls a row into view for a
 // screenshot, and presses Confirm. Nothing here calls a mod's save() directly.
 const TAG = "[SKC]";
