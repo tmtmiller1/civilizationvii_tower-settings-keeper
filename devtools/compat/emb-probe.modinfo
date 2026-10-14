@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Mod id="emb-probe" version="1" xmlns="ModInfo">
+    <Properties>
+        <Name>Tower Settings Keeper embed probe (dev)</Name>
+        <Description>Development only. Starts a Play Now game and drives other mods' settings code through the keeper. Not for release.</Description>
+        <Authors>Tower</Authors>
+        <Package>EmbProbe</Package>
+        <PackageSortIndex>9999</PackageSortIndex>
+        <Version>0.0.1</Version>
+        <AffectsSavedGames>0</AffectsSavedGames>
+    </Properties>
+    <Dependencies>
+        <Mod id="base-standard" title="LOC_MODULE_BASE_STANDARD_NAME" />
+    </Dependencies>
+    <ActionCriteria>
+        <Criteria id="always"><AlwaysMet></AlwaysMet></Criteria>
+    </ActionCriteria>
+    <ActionGroups>
+        <ActionGroup id="emb-shell" scope="shell" criteria="always">
+            <Properties><LoadOrder>9999</LoadOrder></Properties>
+            <Actions><UIScripts><Item>ui/emb-shell.js</Item></UIScripts></Actions>
+        </ActionGroup>
+        <ActionGroup id="emb-game" scope="game" criteria="always">
+            <Properties><LoadOrder>9999</LoadOrder></Properties>
+            <Actions><UIScripts><Item>ui/emb-game.js</Item></UIScripts></Actions>
+        </ActionGroup>
+    </ActionGroups>
+</Mod>
