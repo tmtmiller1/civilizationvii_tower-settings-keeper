@@ -1,5 +1,5 @@
 [h1]Tower Settings Keeper[/h1]
-[b]Version 1.3.0. For Civilization VII 1.5.0. In all eleven languages the game supports.[/b]
+[b]Version 1.3.1. For Civilization VII 1.5.0. In all eleven languages the game supports.[/b]
 With this mod installed, the options you set in other mods stay set after you restart the game. It has no options of its own, does not change gameplay, and needs no setup. Install it, enable it, and every mod you have keeps its settings.
 [h2]The problem it fixes[/h2]
 Mods keep their settings in the game's saved-settings store, the same place a web page would use. In Civilization VII 1.5.0 that store has a bug. A read returns the first entry in the store, no matter which entry was asked for, and there is no way to list the entries. A mod can read its own settings only if its entry happens to sort first. Every other mod gets a different mod's data, treats it as its own, and writes it back under its own name the next time it saves.

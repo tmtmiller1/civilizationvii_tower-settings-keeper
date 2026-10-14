@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.3.1] - 2026-10-14
+
+- The license now says that Civilization VII and its art and data belong to Firaxis and 2K. The mod itself works
+  exactly as in 1.3.0.
+
 ## [1.3.0] - 2026-10-07
 
 - The store has a size limit of 4 MB. A write that would take the one row past it is refused with the standard
