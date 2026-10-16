@@ -4,15 +4,20 @@
 Checks, each printed as PASS or FAIL:
   enabled     the game's Target Mods list holds exactly the expected tower mods (from mods-dir.txt) and the probe
   copies      every installed settings-keeper.js matches the keeper repo byte for byte
-  ready       one keeper "ready" line per scope from a build 112 copy; which copies logged it
-  keeper      in both scopes the probe sees build 112, one raw row, length shadowed
+  ready       one keeper "ready" line per scope from a copy of this repo's BUILD; which copies logged it
+  keeper      in both scopes the probe sees that BUILD, one raw row, length shadowed
   fold        a poisoned AutoMissionary row was moved under __ls (the store ends with one row)
   restart     own keys, the shared slice and each mod's own setting read back what the previous run wrote
   in-launch   writes read back at once; the game scope reads the settings the shell scope wrote
   store       the post-run store is one modSettings row that holds this run's tokens and kept the player's data
   errors      UI.log errors that name a carrier's files
+The expected BUILD is read from ui/settings-keeper.js; SK_BUILD=<n> overrides it, to recheck runs from before a bump.
 """
 import json, os, re, sqlite3, sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+BUILD = os.environ.get("SK_BUILD") or re.search(r"export const BUILD = (\d+)", open(
+    os.path.join(HERE, "..", "..", "ui", "settings-keeper.js")).read()).group(1)
 
 def jl(t):
     t = t.strip()
@@ -27,7 +32,10 @@ def verdict(name, ok, detail=""):
 ID = {"all-display-options": "all-display-options", "build_wonders_over_antiquated_buildings": "tower-build-wonders-over-antiquated-buildings",
       "canals": "tower-canals", "cultural_diffusion": "cultural-diffusion", "dams": "tower-dams", "emigration": "emigration",
       "geographic_labels": "tmt-geographic-labels", "national_parks": "tower-national-park", "readable-tooltips": "readable-tooltips",
-      "universal_auto-explore": "universal-auto-explore", "demographics": "demographics", "tower_settings_keeper": "tower-settings-keeper"}
+      "universal_auto-explore": "universal-auto-explore", "demographics": "demographics",
+      "numpad-unit-movement": "tmt-numpad-unit-movement", "zoom-tilt-rotate": "tmt-zoom-tilt-rotate",
+      "strategic_resources_that_matter": "tower-strategic-resources-that-matter", "partisans": "tower-partisans",
+      "tower_settings_keeper": "tower-settings-keeper"}
 carriers = [l.strip()[4:] for l in open(os.path.join(run, "mods-dir.txt")) if l.startswith("emb-") and l.strip() != "emb-probe"]
 expected = sorted(ID[c] for c in carriers) + ["emb-probe"]
 
@@ -59,7 +67,7 @@ r_shell, r_game = readies(probe[:split]), readies(probe[split:])
 other_ks = [l for l in probe if "[settings-keeper]" in l and "ready" not in l]
 want_keeper = bool(carriers)
 if want_keeper:
-    ok = len(r_shell) >= 1 and len(r_game) >= 1 and all(b == "112" for b, _ in r_shell + r_game)
+    ok = len(r_shell) >= 1 and len(r_game) >= 1 and all(b == BUILD for b, _ in r_shell + r_game)
     verdict("ready", ok, "shell " + json.dumps(r_shell) + " game " + json.dumps(r_game) + (" | other keeper lines: " + json.dumps(other_ks) if other_ks else ""))
 else:
     verdict("ready", not r_shell and not r_game, "no carrier, no keeper expected; saw " + json.dumps(r_shell + r_game))
@@ -78,10 +86,10 @@ for scope in ("shell", "game"):
     k = find("[EMB] " + scope + " keeper {")
     st = json.loads(re.search(r"keeper (\{.*?\}) length", k).group(1)) if k else {}
     if want_keeper and FALLBACK:
-        ok = st.get("build") == 112 and st.get("root") == "\u0001" and st.get("blocked") is True and st.get("lengthShadowed") is True
+        ok = st.get("build") == int(BUILD) and st.get("root") == "\u0001" and st.get("blocked") is True and st.get("lengthShadowed") is True
         verdict("keeper " + scope + " (fallback mode expected)", ok, json.dumps({x: st.get(x) for x in ("build", "origin", "root", "rows", "rawRows", "blocked")}))
     elif want_keeper:
-        ok = st.get("build") == 112 and st.get("rawRows") == 1 and st.get("lengthShadowed") is True and st.get("rows") == 1
+        ok = st.get("build") == int(BUILD) and st.get("rawRows") == 1 and st.get("lengthShadowed") is True and st.get("rows") == 1
         verdict("keeper " + scope, ok, json.dumps({x: st.get(x) for x in ("build", "origin", "rows", "rawRows", "lengthShadowed", "folded", "blocked")}))
     else:
         verdict("keeper " + scope, st.get("keeper", "x") is None, "none expected")

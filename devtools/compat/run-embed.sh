@@ -17,7 +17,7 @@ set -u
 S="$HOME/Library/Application Support/Civilization VII"; DB="$S/Mods.sqlite"; MODS="$S/Mods"; LOG="$S/Logs/UI.log"
 WS="$HOME/Library/Application Support/Steam/steamapps/workshop/content/1295660"; WSK="3815023570"
 HERE="$(cd "$(dirname "$0")" && pwd)"; TOWER="$(cd "$HERE/../../.." && pwd)"; M="$HERE/runs/EMB/_matrix"
-TOWER_IDS="'all-display-options','tower-build-wonders-over-antiquated-buildings','tower-canals','cultural-diffusion','tower-dams','emigration','tmt-geographic-labels','tmt-geographic-labels-dev','tower-national-park','readable-tooltips','universal-auto-explore','demographics','tower-settings-keeper'"
+TOWER_IDS="'all-display-options','tower-build-wonders-over-antiquated-buildings','tower-canals','cultural-diffusion','tower-dams','emigration','tmt-geographic-labels','tmt-geographic-labels-dev','tower-national-park','readable-tooltips','universal-auto-explore','demographics','tmt-numpad-unit-movement','tmt-zoom-tilt-rotate','tower-strategic-resources-that-matter','tower-partisans','tower-settings-keeper'"
 say() { echo "[$(date +%H:%M:%S)] $*" | tee -a "${OUT:-$M}/runner.log"; }
 busy() {
   if pgrep -x CivilizationVII >/dev/null; then echo "game is running; refusing"; return 0; fi

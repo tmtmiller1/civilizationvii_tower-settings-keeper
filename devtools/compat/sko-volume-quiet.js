@@ -1,9 +1,8 @@
 // sko-volume-quiet.js - game scope. The growth loop of sko-volume.js with the read-back churn removed: one keeper
-// write and one flush per step, nothing read back until the end. How the one row behaves as it grows. Starting from the player's real root, it adds
-// 1 MB chunks through the keeper and, after each step, times one flush (serialise plus engine write), one small-key
-// read, one raw engine read of the row, and checks the first chunk reads back unchanged. It stops at __PHASE__ MB,
-// when a write throws, or when a flush passes 3 s. Then it writes 2000 small keys and times that. The runner restores
-// the store afterwards; a second launch seeded from this run's store measures start-up on the big row.
+// write and one flush per step, nothing read back until the end. Starting from the player's real root, it adds 1 MB
+// chunks through the keeper and times each flush (serialise plus engine write). It stops at __PHASE__ MB, when a write
+// throws, or when a flush passes 3 s. Then it writes 2000 small keys, times that, and checks that the first and last
+// chunks read back. The runner restores the store afterwards.
 const LIMIT_MB = Number("__PHASE__") || 64;
 const TAG = "[SKC]";
 function emit(m) { try { console.error(TAG + " " + m); } catch (_) {} }

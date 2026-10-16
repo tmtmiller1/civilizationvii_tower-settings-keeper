@@ -51,7 +51,7 @@ the game reads correctly, `modSettings`.
 To confirm it ran, look for one line per scope in `Logs/UI.log`:
 
 ```
-[settings-keeper] ready (build 112 from <your mod folder>): root "modSettings", rows 1, slices 7, keys kept 2, 530 KB
+[settings-keeper] ready (build 112 from <your mod folder>): root "modSettings", rows 1, slices 8, keys kept 2, 758 KB
 ```
 
 ## Several mods carrying the file

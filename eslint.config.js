@@ -12,12 +12,17 @@ export default [
       "max-statements": ["error", 18],
       "max-depth": ["error", 4],
       "max-lines-per-function": ["error", { max: 50, skipBlankLines: true, skipComments: true, IIFEs: true }],
-      "max-lines": ["error", { max: 600, skipBlankLines: true, skipComments: true }], // settings-keeper.js is one file on purpose
+      "max-lines": ["error", { max: 500, skipBlankLines: true, skipComments: true }],
       "max-len": ["error", { code: 120, ignoreUrls: true, ignoreStrings: true, ignoreTemplateLiterals: true, ignoreRegExpLiterals: true }],
       "max-params": ["error", 5],
       "no-undef": "error",
       "no-unused-vars": ["error", { argsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_" }],
       eqeqeq: ["error", "always", { null: "ignore" }]
     }
+  },
+  {
+    // settings-keeper.js is one file on purpose: a script with no imports runs as early as any script can
+    files: ["ui/settings-keeper.js"],
+    rules: { "max-lines": ["error", { max: 600, skipBlankLines: true, skipComments: true }] }
   }
 ];

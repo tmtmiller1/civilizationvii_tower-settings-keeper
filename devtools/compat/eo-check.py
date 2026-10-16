@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
-"""eo-check.py <W run dir> <R run dir>: did each option changed on the in-game Options screen survive a full restart?"""
+"""eo-check.py <W run dir> <R run dir>: did each option changed on the in-game Options screen survive a full restart?
+The expected BUILD is read from ui/settings-keeper.js; SK_BUILD=<n> overrides it, to recheck runs from before a bump."""
 import json, os, re, sys
+HERE = os.path.dirname(os.path.abspath(__file__))
+BUILD = int(os.environ.get("SK_BUILD") or re.search(r"export const BUILD = (\d+)", open(
+    os.path.join(HERE, "..", "..", "ui", "settings-keeper.js")).read()).group(1))
 W, R = sys.argv[1:3]
 def lines(d): return [l.split("\t", 1)[-1].rstrip() for l in open(os.path.join(d, "probe.log"), errors="replace")]
 def val(t): return json.loads(t)
@@ -24,7 +28,7 @@ for l in w:
 for d, ls in ((W, w), (R, r)):
     ks = [json.loads(re.search(r"keeper (\{.*?\})", l).group(1)) for l in ls if re.match(r"\[EO\] (shell|game) keeper \{", l)]
     origins = sorted({k.get("origin") for k in ks}); rows = sorted({k.get("rawRows") for k in ks})
-    good = all(k.get("build") == 112 for k in ks) and rows == [1] and bool(ks)
+    good = all(k.get("build") == BUILD for k in ks) and rows == [1] and bool(ks)
     ok_all &= good
     crash = [f for f in os.listdir(d) if f.endswith(".ips")]
     ok_all &= not crash

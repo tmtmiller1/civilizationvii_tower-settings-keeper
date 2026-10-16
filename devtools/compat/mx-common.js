@@ -1,8 +1,9 @@
-// eo-common.js - in-game Options probe (the runner prepends SCOPE, TOKEN, PHASE and START_AGE).
-// Phase W, game scope: open the real in-game Options screen, change one row per tower mod through its own control
-// (toggle() or onItemSelected(), as a click does), press Confirm, and log the mod's own reading of the value.
-// Phase R, after a full restart: log each mod's reading in the main menu, and in a new game both the mod's reading
-// and what the Options screen shows.
+// mx-common.js - the settings transition matrix (the runner prepends SCOPE, TOKEN, PHASE and START_AGE; PHASE names
+// the launch, L1 to L3). The first half is eo-common.js's Options-screen driver. The second half runs one chain per
+// launch: change one row per tower mod on the real Options screen and press Confirm ("SET"), move between the menu and
+// a game (new game, exit to menu, restart, quick save and load, relaunch), and read every setting back through the
+// mods' own code after each move ("READ"). The steps are in mx-shell-tail.js and mx-game-tail.js; mx-check.py checks
+// each READ against the latest SET.
 const TAG = "[MX] " + SCOPE + " ";
 function emit(m) { try { console.error(TAG + m); } catch (_) {} }
 function J(o) { try { return JSON.stringify(o); } catch (e) { return "unserializable:" + e; } }

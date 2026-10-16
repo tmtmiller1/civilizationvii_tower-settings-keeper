@@ -1,6 +1,6 @@
 #!/bin/zsh
 set -u; cd "$(dirname "$0")"; V=runs/EMB/verdicts.txt
-ALL="all-display-options build_wonders_over_antiquated_buildings canals cultural_diffusion dams emigration geographic_labels national_parks readable-tooltips universal_auto-explore demographics"
+ALL="all-display-options build_wonders_over_antiquated_buildings canals cultural_diffusion dams emigration geographic_labels national_parks readable-tooltips universal_auto-explore demographics numpad-unit-movement zoom-tilt-rotate strategic_resources_that_matter partisans"
 one() { local label=$1 prev=$2; shift 2; env "$@" ./run-embed.sh run "$label" > /dev/null 2>&1
   { echo "===== $label ($*)"; python3 emb-check.py runs/EMB/$label ${prev:+runs/EMB/$prev} 2>&1; } >> $V; sleep 15; }
 for m in emigration geographic_labels; do

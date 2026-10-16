@@ -10,6 +10,7 @@
     "test": "node --test tests/*.test.mjs",
     "verify": "npm run lint && npm run check && npm test",
     "steam:changelog": "node scripts/steam-changelog.mjs sync",
+    "carriers": "node scripts/carriers.mjs",
     "release:gate": "npm run verify"
   }
 }
