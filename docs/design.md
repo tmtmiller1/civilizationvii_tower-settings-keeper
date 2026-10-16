@@ -152,6 +152,29 @@ Movement and Partisans on, each to the main menu and into a Play Now game. Run `
 `UI.log` and note the keeper's line in each load and anything listed ahead of it. A Tower mod's settings line ahead
 of the keeper in any launch is the cue to use the import below in that mod.
 
+Usual-set launches from the overnight run of 2026-10-15 (installed copies, Workshop and `Mods/`, as players have
+them; `ready-order.py` on each saved `UI.log`; the logs are in `working_screenshots/overnight-2026-10-15/L*-logs/`):
+
+- L1 (Antiquity lab game): load 1 (main menu) line 3, load 2 (game) line 9, both from Numpad Unit Movement's copy;
+  nothing from another mod ahead of it in either load.
+- L2 (Exploration, Japanese), L3 (Modern, German), L4 (Antiquity, Polish): the same in each, lines 3 and 9, Numpad's
+  copy, nothing ahead of it.
+- L5 (Antiquity, with a save, a quit to the main menu and a load): four loads, lines 3, 9, 3 and 9, Numpad's copy,
+  nothing ahead of it.
+
+So the usual-set half: 5 launches, 12 loads, the keeper's line first in all 12, always Numpad Unit Movement's copy.
+
+The launches with only the keeper, Canals, Numpad Unit Movement and Partisans on weren't part of that run: switching
+the other mods off changes the registry, which the run didn't do. They ran the next day, below.
+
+Four-mod launches, 2026-10-16 (watch run 2 block 1, K1-K5, runs `2026-10-16T18-36-53` to `18-39-30`): five lab
+launches with only the keeper, Canals, Numpad Unit Movement and Partisans on (`Mods/` copies, working trees deployed),
+each to the main menu and into a Play Now game. `ready-order.py` on each `UI.log`: 10 loads, the keeper's line first
+in all 10, at line 3 in the main menu and line 9 in the game. Numpad Unit Movement's copy installed in 8 loads and
+Canals' in 2 (the K1 and K4 game loads). Nothing from another mod came ahead of it. Logs in
+`working_screenshots/watch2-block1/K1-logs/` to `K5-logs/`. With the usual-set half from 2026-10-15, that closes the
+check.
+
 ### Waiting for the keeper (proposal, not rolled out)
 
 A mod that has to read its settings the moment its script loads needs to know the keeper ran first. Two ways,
