@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+- Carries Civilopedia History Corrections. With Civilopedia Expanded: Independents on, six East Asian history pages
+  in the Civilopedia (Goguryeo, the Oirat, two Ryukyu pages, Nanzhao and Balhae) give each side where historians in
+  different countries disagree, and a few factual errors are fixed. With it off, the game's pages stay as they are.
+
 ## [1.3.1] - 2026-10-14
 
 - The license now says that Civilization VII and its art and data belong to Firaxis and 2K. The mod itself works

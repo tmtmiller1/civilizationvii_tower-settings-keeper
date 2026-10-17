@@ -28,7 +28,7 @@ if [ "${SKIP_VERIFY:-0}" != "1" ]; then
     echo "release: running 'npm run release:gate' (set SKIP_VERIFY=1 to skip)..."
     npm run release:gate || { echo "release: gate FAILED, aborting."; exit 1; }
 fi
-command -v xmllint >/dev/null 2>&1 && xmllint --noout "$MODINFO" text/en_us/*.xml
+command -v xmllint >/dev/null 2>&1 && xmllint --noout "$MODINFO" text/en_us/*.xml history-corrections/*.xml
 
 WORKSHOP_ID_FILE="steam_workshop_id.txt"
 PUBLISHED_FILE_ID=""
@@ -38,7 +38,7 @@ ZIP_NAME="${MOD_DIR}-v${VERSION}.zip"
 TARGET_DIR="$DIST_DIR/$MOD_DIR"
 rm -rf "$DIST_DIR"; mkdir -p "$TARGET_DIR/embed"
 cp "$MODINFO" README.md CHANGELOG.md LICENSE "$TARGET_DIR/"
-cp -R ui text "$TARGET_DIR/"
+cp -R ui text history-corrections "$TARGET_DIR/"
 cp embed/README.md "$TARGET_DIR/embed/README.md"
 mkdir -p "$TARGET_DIR/docs"; cp -R docs/readme "$TARGET_DIR/docs/readme"
 # Workshop preview: the mod's emblem, 1024x1024, rendered from docs/workshop-preview.svg. Set by hand on the Workshop
