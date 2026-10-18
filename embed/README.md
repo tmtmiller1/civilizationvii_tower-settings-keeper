@@ -93,4 +93,5 @@ The real `modSettings` row is a JSON object with these keys:
 
 ## Licence
 
-MIT, the same as the mod. No credit needed.
+MIT. The Tower mods themselves are under the Tower Mod License, but this one file stays MIT so you can embed it.
+No credit needed.

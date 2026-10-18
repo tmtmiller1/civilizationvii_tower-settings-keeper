@@ -51,7 +51,11 @@ echo "==> Workshop preview: $DIST_DIR/preview.png"
 
 # the modder-side kit: the one file plus its instructions
 EMBED_DIR="$DIST_DIR/settings-keeper-embed"; mkdir -p "$EMBED_DIR"
-cp ui/settings-keeper.js "$EMBED_DIR/"; cp embed/README.md "$EMBED_DIR/README.md"; cp LICENSE "$EMBED_DIR/"
+cp ui/settings-keeper.js "$EMBED_DIR/"; cp embed/README.md "$EMBED_DIR/README.md"
+# settings-keeper.js stays MIT while the mod is under the Tower Mod License: the kit carries only the MIT text,
+# which LICENSE prints in full at its end.
+sed -n '/^MIT License$/,$p' LICENSE > "$EMBED_DIR/LICENSE"
+grep -q '^Permission is hereby granted' "$EMBED_DIR/LICENSE" || { echo "error: no MIT text at the end of LICENSE"; exit 1; }
 (cd "$DIST_DIR" && zip -qr "settings-keeper-embed-v${VERSION}.zip" settings-keeper-embed -x '*.DS_Store')
 
 ABS_CONTENT="$(cd "$TARGET_DIR" && pwd)"
